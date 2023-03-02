@@ -1,7 +1,6 @@
 using DIKUArcade.Entities;
 using DIKUArcade.Graphics;
 using DIKUArcade.Math;
-
 namespace Galaga {
     public class Player {
         private Entity entity;
