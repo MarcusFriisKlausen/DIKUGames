@@ -7,7 +7,7 @@ namespace Galaga {
         private DynamicShape shape;
         private float moveLeft;
         private float moveRight;
-        private const float MOVEMENT_SPEED = 0.1f;
+        private const float MOVEMENT_SPEED = 0.01f;
 
         public Player(DynamicShape shape, IBaseImage image) {
             entity = new Entity(shape, image);
@@ -17,9 +17,18 @@ namespace Galaga {
         }
 
         public void Move() {
-            if (this.shape.Position.X + this.shape.Direction.X > 0.0f && this.shape.Position.X + 
-            this.shape.Direction.X < 0.95f){
-                this.shape.Move();
+            float oldX = this.shape.Position.X;
+            this.shape.Move();
+
+            if (this.shape.Position.X < 0.0f) {
+                this.shape.Position.X = 0.0f;
+            } else if (this.shape.Position.X > 1.0f - this.shape.Extent.X) {
+                this.shape.Position.X = 1.0f - this.shape.Extent.X;
+            }
+
+            if (this.shape.Position.X != oldX) {
+                this.moveLeft = 0.0f;
+                this.moveRight = 0.0f;
             }
         }
     

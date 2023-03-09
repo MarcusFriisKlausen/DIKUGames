@@ -56,37 +56,50 @@ namespace Galaga
         }   
 
         private void KeyPress(KeyboardKey key) {
-            if (key == KeyboardKey.Escape) {
-                GameEvent esc = new GameEvent();
-                esc.EventType = GameEventType.WindowEvent;
-                esc.Message = key.ToString();
-                ProcessEvent(esc);
-            }
-            else if (key == KeyboardKey.Left) {
-                GameEvent moveLeft = new GameEvent();
-                moveLeft.EventType = GameEventType.MovementEvent;
-                moveLeft.Message = key.ToString();
-                ProcessEvent(moveLeft);
-            }
-            else if (key == KeyboardKey.Right) {
-                GameEvent moveRight = new GameEvent();
-                moveRight.EventType = GameEventType.MovementEvent;
-                moveRight.Message = key.ToString();
-                ProcessEvent(moveRight);
-            }
-            else if (key == KeyboardKey.Space) {
-                GameEvent shoot = new GameEvent();
-                shoot.EventType = GameEventType.PlayerEvent;
-                shoot.Message = key.ToString();
-                ProcessEvent(shoot);
+            switch  (key) {
+                case KeyboardKey.Escape:
+                    GameEvent esc = new GameEvent();
+                    esc.EventType = GameEventType.InputEvent;
+                    esc.Message = key.ToString();
+                    eventBus.RegisterEvent(esc);
+                    break;
+                case KeyboardKey.Left:
+                    GameEvent moveLeft = new GameEvent();
+                    moveLeft.EventType = GameEventType.InputEvent;
+                    moveLeft.Message = key.ToString();
+                    eventBus.RegisterEvent(moveLeft);
+                    break;
+                case KeyboardKey.Right:
+                    GameEvent moveRight = new GameEvent();
+                    moveRight.EventType = GameEventType.InputEvent;
+                    moveRight.Message = key.ToString();
+                    eventBus.RegisterEvent(moveRight);
+                    break;
+                case KeyboardKey.Space:
+                    GameEvent shoot = new GameEvent();
+                    shoot.EventType = GameEventType.InputEvent;
+                    shoot.Message = key.ToString();
+                    eventBus.RegisterEvent(shoot);
+                    break;
             }
         }
 
         private void KeyRelease(KeyboardKey key) {
-            GameEvent release = new GameEvent();
-            release.Message = key.ToString();
-            player.SetMoveLeft(false);
-            player.SetMoveRight(false);
+            switch (key){
+                case KeyboardKey.Left:
+                    GameEvent stopLeft = new GameEvent();
+                    stopLeft.EventType = GameEventType.InputEvent;
+                    stopLeft.Message = key.ToString() + " Stop";
+                    eventBus.RegisterEvent(stopLeft);
+                    break;
+                case KeyboardKey.Right:
+                    GameEvent stopRight = new GameEvent();
+                    stopRight.EventType = GameEventType.InputEvent;
+                    stopRight.Message = key.ToString() + " Stop";
+                    eventBus.RegisterEvent(stopRight);
+                    break;
+                
+            }
         }
 
         private void KeyHandler(KeyboardAction action, KeyboardKey key) {
@@ -99,23 +112,28 @@ namespace Galaga
         }
 
         public void ProcessEvent(GameEvent gameEvent) {
-            if (gameEvent.EventType == GameEventType.WindowEvent) {
+            if (gameEvent.Message == KeyboardKey.Escape.ToString()) {
                 window.CloseWindow();
             }
-            else if (gameEvent.EventType == GameEventType.MovementEvent) {
-                if (gameEvent.Message == KeyboardKey.Left.ToString()) {
+            else if (gameEvent.Message == KeyboardKey.Left.ToString()) {
                     player.SetMoveLeft(true);
-                }
-                else if (gameEvent.Message == KeyboardKey.Right.ToString()) {
-                    player.SetMoveRight(true);
-                }
             }
-            else if (gameEvent.EventType == GameEventType.PlayerEvent) {
+            else if (gameEvent.Message == KeyboardKey.Right.ToString()) {
+                player.SetMoveRight(true);
+            }
+            else if (gameEvent.Message == KeyboardKey.Right.ToString() + " Stop") {
+                player.SetMoveRight(false);
+            }
+            else if (gameEvent.Message == KeyboardKey.Left.ToString() + " Stop") {
+                player.SetMoveLeft(false);
+            }
+            else if (gameEvent.Message == KeyboardKey.Space.ToString()) {
                 Vec2F pVec = player.GetPosition();
                 playerShots.AddEntity(new PlayerShot(playerShotImage, pVec));
             }
         }
-
+        
+    
         public override void Render() {
             player.Render();
             enemies.RenderEntities();
