@@ -16,6 +16,10 @@ public class PlayerShot : Entity {
 
     private static Vec2F direction = new Vec2F(0.0f, 0.1f);
 
+    private int damage = 1; 
+    public int Damage{
+        get{return damage;}
+    }
     public PlayerShot(IBaseImage image, Vec2F pVec) 
         : base(new DynamicShape(pVec, extent), image) {}
 }

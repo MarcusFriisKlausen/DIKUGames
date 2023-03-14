@@ -8,6 +8,7 @@ using DIKUArcade.Events;
 using DIKUArcade.Input;
 using System.Collections.Generic;
 using DIKUArcade.Physics;
+using System;
 
 namespace Galaga
 {
@@ -17,6 +18,7 @@ namespace Galaga
         private GameEventBus eventBus;
 
         private EntityContainer<Enemy> enemies;
+       private List<Image> enemyStridesRed;
 
         private EntityContainer<PlayerShot> playerShots;
 
@@ -32,9 +34,11 @@ namespace Galaga
             new Image(Path.Combine("Assets", "Images", "Player.png")));
             
             eventBus = new GameEventBus();
-            eventBus.InitializeEventBus(new List<GameEventType> { GameEventType.InputEvent });
+            eventBus.InitializeEventBus(new List<GameEventType> { 
+                GameEventType.InputEvent, GameEventType.PlayerEvent });
             window.SetKeyEventHandler(KeyHandler);
             eventBus.Subscribe(GameEventType.InputEvent, this);
+            eventBus.Subscribe(GameEventType.PlayerEvent, player);
 
             List<Image> images = ImageStride.CreateStrides
                 (4, Path.Combine("Assets", "Images", "BlueMonster.png"));
@@ -46,6 +50,8 @@ namespace Galaga
                     new Vec2F(0.1f, 0.1f)),
                     new ImageStride(80, images)));
             }
+            List<Image> enemyStridesRed = ImageStride.CreateStrides
+                (2, Path.Combine("Assets","Images", "RedMonster.png"));
 
             playerShots = new EntityContainer<PlayerShot>();
             playerShotImage = new Image(Path.Combine("Assets", "Images", "BulletRed2.png"));
@@ -65,13 +71,13 @@ namespace Galaga
                     break;
                 case KeyboardKey.Left:
                     GameEvent moveLeft = new GameEvent();
-                    moveLeft.EventType = GameEventType.InputEvent;
+                    moveLeft.EventType = GameEventType.PlayerEvent;
                     moveLeft.Message = key.ToString();
                     eventBus.RegisterEvent(moveLeft);
                     break;
                 case KeyboardKey.Right:
                     GameEvent moveRight = new GameEvent();
-                    moveRight.EventType = GameEventType.InputEvent;
+                    moveRight.EventType = GameEventType.PlayerEvent;
                     moveRight.Message = key.ToString();
                     eventBus.RegisterEvent(moveRight);
                     break;
@@ -88,13 +94,13 @@ namespace Galaga
             switch (key){
                 case KeyboardKey.Left:
                     GameEvent stopLeft = new GameEvent();
-                    stopLeft.EventType = GameEventType.InputEvent;
+                    stopLeft.EventType = GameEventType.PlayerEvent;
                     stopLeft.Message = key.ToString() + " Stop";
                     eventBus.RegisterEvent(stopLeft);
                     break;
                 case KeyboardKey.Right:
                     GameEvent stopRight = new GameEvent();
-                    stopRight.EventType = GameEventType.InputEvent;
+                    stopRight.EventType = GameEventType.PlayerEvent;
                     stopRight.Message = key.ToString() + " Stop";
                     eventBus.RegisterEvent(stopRight);
                     break;
@@ -115,22 +121,11 @@ namespace Galaga
             if (gameEvent.Message == KeyboardKey.Escape.ToString()) {
                 window.CloseWindow();
             }
-            else if (gameEvent.Message == KeyboardKey.Left.ToString()) {
-                    player.SetMoveLeft(true);
-            }
-            else if (gameEvent.Message == KeyboardKey.Right.ToString()) {
-                player.SetMoveRight(true);
-            }
-            else if (gameEvent.Message == KeyboardKey.Right.ToString() + " Stop") {
-                player.SetMoveRight(false);
-            }
-            else if (gameEvent.Message == KeyboardKey.Left.ToString() + " Stop") {
-                player.SetMoveLeft(false);
-            }
             else if (gameEvent.Message == KeyboardKey.Space.ToString()) {
                 Vec2F pVec = player.GetPosition();
                 playerShots.AddEntity(new PlayerShot(playerShotImage, pVec));
             }
+            player.ProcessEvent(gameEvent);
         }
         
     
@@ -158,14 +153,20 @@ namespace Galaga
                         shotShape.ChangeDirection(new Vec2F(0.0f, 0.1f));
                         var enemyShape = enemy.Shape;
                         var data = CollisionDetection.Aabb(shotShape, enemyShape);
-                        if (data.Collision == true) {
-                            AddExplosion(enemy.Shape.Position, new Vec2F(0.1f, 0.1f));
-                            enemy.DeleteEntity();
-                            shot.DeleteEntity();
+                        if (data.Collision == true){
+                            enemy.Hitpoints = enemy.Hitpoints - shot.Damage;
+                            if (enemy.Hitpoints <= Math.Floor((double)(enemy.Hitpoints/2))){
+                                enemy.Enrage();
+                            }
+                            if (enemy.Hitpoints <= 0) {
+                                AddExplosion(enemy.Shape.Position, new Vec2F(0.1f, 0.1f));
+                                enemy.DeleteEntity();
+                                shot.DeleteEntity();
+                            }
                         }
                     });
                 }
-            });
+            }); 
         }
 
         public void AddExplosion(Vec2F position, Vec2F extent) {
