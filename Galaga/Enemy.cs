@@ -1,9 +1,32 @@
 using DIKUArcade.Entities;
 using DIKUArcade.Graphics;
+using System.IO;
+using System.Collections.Generic;
+using DIKUArcade.Math;
+
 namespace Galaga;
     public class Enemy : Entity {
-        private IBaseImage enemyImage;
-        private int hitpoints = 5; 
+        private Vec2F startPos;
+        private bool isMovingLeft = false;
+        public bool IsMovingLeft {
+            get {return isMovingLeft;}
+        }
+        public Vec2F StartPos {
+            get {return startPos;}
+        }
+        private float movement_speed = 0.0003f;
+        public float MOVEMENT_SPEED{
+            get {return movement_speed;}
+        }
+        private const int max_hitpoints = 4;
+
+        public int Max_hitpoints {
+            get {
+                return max_hitpoints;
+            }
+        }
+
+        private int hitpoints = max_hitpoints; 
         public int Hitpoints {
             get {
                 return hitpoints;
@@ -20,15 +43,31 @@ namespace Galaga;
             }
         }
 
+        List<Image> enemyStridesRed;
+
         public Enemy(DynamicShape shape, IBaseImage image) 
             : base(shape, image) {
-                enemyImage = base.Image;
+                Image = base.Image;
+                startPos = this.Shape.Position;
             }
 
         public void Enrage() {
-            if (hitpoints >= 3) {
-                isEnraged = true;
-                this.Image =  ;    
+            isEnraged = true;
+            enemyStridesRed = ImageStride.CreateStrides
+                (4, Path.Combine("Assets","Images", "RedMonster.png"));
+            Image = new ImageStride(80, enemyStridesRed);
+            movement_speed = movement_speed * 3.0f; 
+        }
+
+        public void IncreaseMS() {
+            movement_speed += 0.0001f;
+        }
+
+        public void swapDirection() {
+            if (!isMovingLeft) {
+                isMovingLeft = true;
+            } else {
+                isMovingLeft = false;
             }
         }
 }

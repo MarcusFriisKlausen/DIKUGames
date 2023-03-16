@@ -9,6 +9,8 @@ using DIKUArcade.Input;
 using System.Collections.Generic;
 using DIKUArcade.Physics;
 using System;
+using Galaga.Squadron;
+using Galaga.MovementStrategy;
 
 namespace Galaga
 {
@@ -18,7 +20,6 @@ namespace Galaga
         private GameEventBus eventBus;
 
         private EntityContainer<Enemy> enemies;
-       private List<Image> enemyStridesRed;
 
         private EntityContainer<PlayerShot> playerShots;
 
@@ -27,6 +28,17 @@ namespace Galaga
         private AnimationContainer enemyExplosions;
         private List<Image> explosionStrides;
         private const int EXPLOSION_LENGTH_MS = 500;
+        private SquadronFormI squadronI = new SquadronFormI();
+        private NoMove noMove = new NoMove();
+        private Down down = new Down();
+        private ZigZagDown zigZag = new ZigZagDown();
+        private Health health;
+        private Text levelDisplay;
+        private List<Image> images;
+        private List<Image> enemyStridesRed;
+        private int level = 0;
+        private SquadronFormV squadronV = new SquadronFormV();
+        private SquadronFormBracket squadronBracket = new SquadronFormBracket();
 
         public Game(WindowArgs windowArgs) : base(windowArgs) {
             player = new Player(
@@ -40,25 +52,28 @@ namespace Galaga
             eventBus.Subscribe(GameEventType.InputEvent, this);
             eventBus.Subscribe(GameEventType.PlayerEvent, player);
 
-            List<Image> images = ImageStride.CreateStrides
+            images = ImageStride.CreateStrides
                 (4, Path.Combine("Assets", "Images", "BlueMonster.png"));
-            const int numEnemies = 8;
-            enemies = new EntityContainer<Enemy>(numEnemies);
-            for (int i = 0; i < numEnemies; i++) {
-                enemies.AddEntity(new Enemy(
-                    new DynamicShape(new Vec2F(0.1f + (float)i * 0.1f, 0.9f), 
-                    new Vec2F(0.1f, 0.1f)),
-                    new ImageStride(80, images)));
-            }
-            List<Image> enemyStridesRed = ImageStride.CreateStrides
+            
+            enemyStridesRed = ImageStride.CreateStrides
                 (2, Path.Combine("Assets","Images", "RedMonster.png"));
+            
+            squadronI.CreateEnemies(images, enemyStridesRed);
+
+            enemies = squadronI.Enemies;
 
             playerShots = new EntityContainer<PlayerShot>();
             playerShotImage = new Image(Path.Combine("Assets", "Images", "BulletRed2.png"));
 
-            enemyExplosions = new AnimationContainer(numEnemies);
+            enemyExplosions = new AnimationContainer(squadronI.MaxEnemies);
             explosionStrides = ImageStride.CreateStrides(8,
                 Path.Combine("Assets", "Images", "Explosion.png"));
+            
+            health = new Health(new Vec2F(0.0f, -0.2f), new Vec2F(0.3f, 0.32f));
+
+            levelDisplay = new Text ("LEVEL: " + (level.ToString()), new Vec2F(0.0f, 0.0f), 
+                new Vec2F(0.3f, 0.32f));
+            levelDisplay.SetColor(255, 255, 255, 255);
         }   
 
         private void KeyPress(KeyboardKey key) {
@@ -130,15 +145,36 @@ namespace Galaga
         
     
         public override void Render() {
-            player.Render();
-            enemies.RenderEntities();
-            playerShots.RenderEntities();
-            enemyExplosions.RenderAnimations();
+            if (health.gameOver == false) {
+                player.Render();
+                enemies.RenderEntities();
+                playerShots.RenderEntities();
+                enemyExplosions.RenderAnimations();
+                health.RenderHealth();
+                levelDisplay.RenderText();
+            } 
+            else {
+                eventBus.ProcessEventsSequentially();
+                levelDisplay.RenderText();
+            }
         }
+        
         public override void Update() {
             eventBus.ProcessEventsSequentially();
             player.Move();
             IterateShots();
+            if (level > 5) {
+                zigZag.MoveEnemies(enemies);
+            }
+            if (level > 1 && level <= 5) {
+                down.MoveEnemies(enemies);
+            }
+            if (level <= 1) {
+                noMove.MoveEnemies(enemies);
+            }
+            HealthUpdate();
+            LevelUpdate();
+            EnemyReach();
         }
 
         private void IterateShots() {
@@ -155,18 +191,36 @@ namespace Galaga
                         var data = CollisionDetection.Aabb(shotShape, enemyShape);
                         if (data.Collision == true){
                             enemy.Hitpoints = enemy.Hitpoints - shot.Damage;
-                            if (enemy.Hitpoints <= Math.Floor((double)(enemy.Hitpoints/2))){
+                            shot.DeleteEntity();
+                            if (enemy.Hitpoints <= Math.Floor((double)(enemy.Max_hitpoints/2))){
                                 enemy.Enrage();
                             }
-                            if (enemy.Hitpoints <= 0) {
+                            if (enemy.Hitpoints <= 0 ) {
                                 AddExplosion(enemy.Shape.Position, new Vec2F(0.1f, 0.1f));
                                 enemy.DeleteEntity();
                                 shot.DeleteEntity();
+                                enemies = RemoveEntities(enemies);
+                                if (enemies.CountEntities() == 0){
+                                    SpawnNew();
+                                }
                             }
                         }
                     });
                 }
             }); 
+        }
+        
+        public EntityContainer<Enemy> RemoveEntities(EntityContainer<Enemy> container){
+            var count = container.CountEntities();
+            EntityContainer<Enemy> newCont = new EntityContainer<Enemy>(count);
+
+            foreach (Enemy ent in container) {
+                if (!ent.IsDeleted()) {
+                    newCont.AddEntity(ent);
+                }
+            }
+
+            return newCont;
         }
 
         public void AddExplosion(Vec2F position, Vec2F extent) {
@@ -175,5 +229,68 @@ namespace Galaga
             ImageStride explosion = new ImageStride(EXPLOSION_LENGTH_MS/8, explosionStrides);
             enemyExplosions.AddAnimation(explosionShape, EXPLOSION_LENGTH_MS, explosion);
         }
+
+        public void HealthUpdate(){
+            health.display.SetText("HEALTH: " + health.ToString());
+
+    
+        }
+
+        public void LevelUpdate(){
+            levelDisplay.SetText("LEVEL: " + (level.ToString()));
+        }
+
+        public void SpawnNew() {
+            squadronI = new SquadronFormI();
+            squadronV = new SquadronFormV();
+            squadronBracket = new SquadronFormBracket();
+            
+            squadronI.CreateEnemies(images, enemyStridesRed);
+            squadronV.CreateEnemies(images, enemyStridesRed);
+            squadronBracket.CreateEnemies(images, enemyStridesRed);
+
+            level++;
+            Random rnd = new Random();
+            int r = rnd.Next(0, 2);
+            
+            if (r == 0) {
+                foreach (Enemy enm in squadronV.Enemies) {
+                    for (int i = 0; i < level; i++) {
+                        enm.IncreaseMS();
+                    }
+                }
+                enemies = squadronV.Enemies;
+            } 
+            if (r == 1) {
+                foreach (Enemy enm in squadronBracket.Enemies) {
+                    for (int i = 0; i < level; i++) {
+                        enm.IncreaseMS();
+                    }
+                }
+                enemies = squadronBracket.Enemies;
+            } 
+            if (r == 2) {
+                foreach (Enemy enm in squadronI.Enemies) {
+                    for (int i = 0; i < level; i++) {
+                        enm.IncreaseMS();
+                    }
+                }
+                enemies = squadronI.Enemies;
+            }
+        }
+
+        public void EnemyReach() {
+            foreach (Enemy enemy in enemies) {
+                if (enemy.Shape.Position.Y <= 0.0f + enemy.Shape.Extent.Y){
+                                health.LoseHealth();
+                                enemy.DeleteEntity();  
+                                enemies = RemoveEntities(enemies);
+                                if (enemies.CountEntities() == 0){
+                                    SpawnNew();
+                                }
+                            }
+            }
+        }
+
     }  
 }
