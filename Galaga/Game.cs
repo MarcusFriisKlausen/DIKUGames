@@ -35,7 +35,7 @@ namespace Galaga
         private Health health;
         private Text levelDisplay;
         private List<Image> images;
-        private List<Image> enemyStridesRed;
+        private List<Image> enrageStride;
         private int level = 0;
         private SquadronFormV squadronV = new SquadronFormV();
         private SquadronFormBracket squadronBracket = new SquadronFormBracket();
@@ -55,10 +55,10 @@ namespace Galaga
             images = ImageStride.CreateStrides
                 (4, Path.Combine("Assets", "Images", "BlueMonster.png"));
             
-            enemyStridesRed = ImageStride.CreateStrides
+            enrageStride = ImageStride.CreateStrides
                 (2, Path.Combine("Assets","Images", "RedMonster.png"));
             
-            squadronI.CreateEnemies(images, enemyStridesRed);
+            squadronI.CreateEnemies(images, enrageStride);
 
             enemies = squadronI.Enemies;
 
@@ -193,7 +193,7 @@ namespace Galaga
                             enemy.Hitpoints = enemy.Hitpoints - shot.Damage;
                             shot.DeleteEntity();
                             if (enemy.Hitpoints <= Math.Floor((double)(enemy.Max_hitpoints/2))){
-                                enemy.Enrage();
+                                enemy.Enrage(enrageStride);
                             }
                             if (enemy.Hitpoints <= 0 ) {
                                 AddExplosion(enemy.Shape.Position, new Vec2F(0.1f, 0.1f));
@@ -230,13 +230,13 @@ namespace Galaga
             enemyExplosions.AddAnimation(explosionShape, EXPLOSION_LENGTH_MS, explosion);
         }
 
-        public void HealthUpdate(){
+        public void HealthUpdate() {
             health.display.SetText("HEALTH: " + health.ToString());
 
     
         }
 
-        public void LevelUpdate(){
+        public void LevelUpdate() {
             levelDisplay.SetText("LEVEL: " + (level.ToString()));
         }
 
@@ -245,9 +245,9 @@ namespace Galaga
             squadronV = new SquadronFormV();
             squadronBracket = new SquadronFormBracket();
             
-            squadronI.CreateEnemies(images, enemyStridesRed);
-            squadronV.CreateEnemies(images, enemyStridesRed);
-            squadronBracket.CreateEnemies(images, enemyStridesRed);
+            squadronI.CreateEnemies(images, enrageStride);
+            squadronV.CreateEnemies(images, enrageStride);
+            squadronBracket.CreateEnemies(images, enrageStride);
 
             level++;
             Random rnd = new Random();

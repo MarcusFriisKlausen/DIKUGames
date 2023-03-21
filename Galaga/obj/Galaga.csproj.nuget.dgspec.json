@@ -1,32 +1,30 @@
 {
   "format": 1,
   "restore": {
-    "C:\\SU\\DIKUGames\\galaga\\Galaga.csproj": {}
+    "C:\\Users\\marcu\\DIKUGames\\Galaga\\Galaga.csproj": {}
   },
   "projects": {
-    "C:\\SU\\DIKUGames\\DIKUArcade\\DIKUArcade\\DIKUArcade.csproj": {
+    "C:\\Users\\marcu\\DIKUGames\\DIKUArcade\\DIKUArcade\\DIKUArcade.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\SU\\DIKUGames\\DIKUArcade\\DIKUArcade\\DIKUArcade.csproj",
+        "projectUniqueName": "C:\\Users\\marcu\\DIKUGames\\DIKUArcade\\DIKUArcade\\DIKUArcade.csproj",
         "projectName": "DIKUArcade",
-        "projectPath": "C:\\SU\\DIKUGames\\DIKUArcade\\DIKUArcade\\DIKUArcade.csproj",
-        "packagesPath": "C:\\Users\\jonas\\.nuget\\packages\\",
-        "outputPath": "C:\\SU\\DIKUGames\\DIKUArcade\\DIKUArcade\\obj\\",
+        "projectPath": "C:\\Users\\marcu\\DIKUGames\\DIKUArcade\\DIKUArcade\\DIKUArcade.csproj",
+        "packagesPath": "C:\\Users\\marcu\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\marcu\\DIKUGames\\DIKUArcade\\DIKUArcade\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\jonas\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\marcu\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
-          "net5.0"
+          "net6.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "net5.0": {
-            "targetAlias": "net5.0",
+          "net6.0": {
+            "targetAlias": "net6.0",
             "projectReferences": {}
           }
         },
@@ -37,8 +35,8 @@
         }
       },
       "frameworks": {
-        "net5.0": {
-          "targetAlias": "net5.0",
+        "net6.0": {
+          "targetAlias": "net6.0",
           "dependencies": {
             "OpenTK": {
               "target": "Package",
@@ -60,55 +58,39 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[5.0.0, 5.0.0]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[5.0.0, 5.0.0]"
-            },
-            {
-              "name": "Microsoft.WindowsDesktop.App.Ref",
-              "version": "[5.0.0, 5.0.0]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.400\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\SU\\DIKUGames\\galaga\\Galaga.csproj": {
+    "C:\\Users\\marcu\\DIKUGames\\Galaga\\Galaga.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\SU\\DIKUGames\\galaga\\Galaga.csproj",
+        "projectUniqueName": "C:\\Users\\marcu\\DIKUGames\\Galaga\\Galaga.csproj",
         "projectName": "Galaga",
-        "projectPath": "C:\\SU\\DIKUGames\\galaga\\Galaga.csproj",
-        "packagesPath": "C:\\Users\\jonas\\.nuget\\packages\\",
-        "outputPath": "C:\\SU\\DIKUGames\\galaga\\obj\\",
+        "projectPath": "C:\\Users\\marcu\\DIKUGames\\Galaga\\Galaga.csproj",
+        "packagesPath": "C:\\Users\\marcu\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\marcu\\DIKUGames\\Galaga\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\jonas\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\marcu\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\SU\\DIKUGames\\DIKUArcade\\DIKUArcade\\DIKUArcade.csproj": {
-                "projectPath": "C:\\SU\\DIKUGames\\DIKUArcade\\DIKUArcade\\DIKUArcade.csproj"
+              "C:\\Users\\marcu\\DIKUGames\\DIKUArcade\\DIKUArcade\\DIKUArcade.csproj": {
+                "projectPath": "C:\\Users\\marcu\\DIKUGames\\DIKUArcade\\DIKUArcade\\DIKUArcade.csproj"
               }
             }
           }
@@ -138,7 +120,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.400\\RuntimeIdentifierGraph.json"
         }
       }
     }
