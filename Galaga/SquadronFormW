@@ -1,0 +1,31 @@
+using DIKUArcade.Entities;
+using DIKUArcade.Graphics;
+using DIKUArcade.Math;
+using System.Collections.Generic;
+
+namespace Galaga.Squadron;
+public class SquadronFormW : ISquadron {
+    const int maxEnemies = 5;
+    public int MaxEnemies{
+        get{return maxEnemies;}
+    }
+
+    private EntityContainer<Enemy> enemies = new EntityContainer<Enemy>(maxEnemies);
+    public EntityContainer<Enemy> Enemies{
+        get{return enemies;}
+    }
+
+    public SquadronFormW() : base() {}
+    
+    public void CreateEnemies(List<Image> enemyStride, List<Image> alternativeEnemyStride) {
+        for (int i = 0; i < maxEnemies; i++) {
+            for (int j = 0; j < maxEnemies; j++){
+                enemies.AddEntity(new Enemy(
+                    new DynamicShape(new Vec2F(0.1f + (float)i * 0.1f, 0.9f), 
+                    new Vec2F(0.1f, 0.1f)),
+                    new ImageStride(80, enemyStride)));
+            }
+        }
+    }
+    
+}
