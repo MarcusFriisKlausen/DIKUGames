@@ -1210,17 +1210,17 @@
           "bin/placeholder/DIKUArcade.dll": {}
         }
       },
-      "galaga/1.0.0": {
+      "Galaga/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v6.0",
         "dependencies": {
           "DIKUArcade": "1.0.0"
         },
         "compile": {
-          "bin/placeholder/galaga.dll": {}
+          "bin/placeholder/Galaga.dll": {}
         },
         "runtime": {
-          "bin/placeholder/galaga.dll": {}
+          "bin/placeholder/Galaga.dll": {}
         }
       }
     }
@@ -4438,37 +4438,37 @@
       "path": "../DIKUArcade/DIKUArcade/DIKUArcade.csproj",
       "msbuildProject": "../DIKUArcade/DIKUArcade/DIKUArcade.csproj"
     },
-    "galaga/1.0.0": {
+    "Galaga/1.0.0": {
       "type": "project",
-      "path": "../galaga/galaga.csproj",
-      "msbuildProject": "../galaga/galaga.csproj"
+      "path": "../Galaga/Galaga.csproj",
+      "msbuildProject": "../Galaga/Galaga.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net6.0": [
       "DIKUArcade >= 1.0.0",
+      "Galaga >= 1.0.0",
       "Microsoft.NET.Test.Sdk >= 17.1.0",
       "NUnit >= 3.13.3",
       "NUnit.Analyzers >= 3.3.0",
       "NUnit3TestAdapter >= 4.2.1",
-      "coverlet.collector >= 3.1.2",
-      "galaga >= 1.0.0"
+      "coverlet.collector >= 3.1.2"
     ]
   },
   "packageFolders": {
-    "/Users/bruger/.nuget/packages/": {}
+    "C:\\Users\\marcu\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/bruger/Documents/GitHub/DIKUGames/GalagaTests/GalagaTests.csproj",
-      "projectName": "GalagaTests",
-      "projectPath": "/Users/bruger/Documents/GitHub/DIKUGames/GalagaTests/GalagaTests.csproj",
-      "packagesPath": "/Users/bruger/.nuget/packages/",
-      "outputPath": "/Users/bruger/Documents/GitHub/DIKUGames/GalagaTests/obj/",
+      "projectUniqueName": "D:\\marcu\\DIKUGames\\galagaTests\\galagaTests.csproj",
+      "projectName": "galagaTests",
+      "projectPath": "D:\\marcu\\DIKUGames\\galagaTests\\galagaTests.csproj",
+      "packagesPath": "C:\\Users\\marcu\\.nuget\\packages\\",
+      "outputPath": "D:\\marcu\\DIKUGames\\galagaTests\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/bruger/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\marcu\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net6.0"
@@ -4480,11 +4480,11 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "/Users/bruger/Documents/GitHub/DIKUGames/DIKUArcade/DIKUArcade/DIKUArcade.csproj": {
-              "projectPath": "/Users/bruger/Documents/GitHub/DIKUGames/DIKUArcade/DIKUArcade/DIKUArcade.csproj"
+            "D:\\marcu\\DIKUGames\\DIKUArcade\\DIKUArcade\\DIKUArcade.csproj": {
+              "projectPath": "D:\\marcu\\DIKUGames\\DIKUArcade\\DIKUArcade\\DIKUArcade.csproj"
             },
-            "/Users/bruger/Documents/GitHub/DIKUGames/galaga/galaga.csproj": {
-              "projectPath": "/Users/bruger/Documents/GitHub/DIKUGames/galaga/galaga.csproj"
+            "D:\\marcu\\DIKUGames\\Galaga\\Galaga.csproj": {
+              "projectPath": "D:\\marcu\\DIKUGames\\Galaga\\Galaga.csproj"
             }
           }
         }
@@ -4536,8 +4536,8 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.400/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.400\\RuntimeIdentifierGraph.json"
       }
     }
-  }
+  
 }

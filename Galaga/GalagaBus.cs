@@ -1,5 +1,3 @@
-// Ikke implementeret i game.cs endnu
-
 using DIKUArcade.Events;
 
 namespace Galaga {

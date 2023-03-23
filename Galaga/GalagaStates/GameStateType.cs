@@ -1,7 +1,8 @@
 public enum GameStateType {
     GameRunning,
     GamePaused,
-    MainMenu
+    MainMenu,
+    GameLost
 }
 
 namespace Galaga.GalagaStates {
@@ -16,6 +17,12 @@ namespace Galaga.GalagaStates {
 
                     case "MAIN_MENU":
                         return GameStateType.MainMenu;
+
+                    case "QUIT":
+                        return GameStateType.MainMenu;
+                    
+                    case "GAME_LOST":
+                        return GameStateType.GameLost;
 
                     default:
                         throw new System.ArgumentException(
@@ -32,6 +39,9 @@ namespace Galaga.GalagaStates {
 
                     case GameStateType.MainMenu:
                         return "MAIN_MENU";
+                    
+                    case GameStateType.GameLost:
+                        return "GAME_LOST";
 
                     default:
                         throw new System.ArgumentException("Input is not an existing game state");

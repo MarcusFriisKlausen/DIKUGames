@@ -1,30 +1,52 @@
-/* using System.Collections.Generic;
-using NUnit.Framework.Constraints;
-using NUnit.Framework;
-using DIKUArcade.Entities;
+using galagaTests.Enemy;
 using DIKUArcade.Graphics;
+using DIKUArcade.Math;
+using DIKUArcade.Entities;
 using Galaga;
 
-namespace GalagaTest {
+namespace galagaTests;
     [TestFixture]
-    public class TestEnemy {
-        private List<Image> enemyStride;
-        private List<Image> alternativeEnemyStride;
-        private Enemy enemy;
-        
+    public class TestEnemy{
         [SetUp]
-        public void InitializeEnemy() {
-            enemyStride = new List<Image>();
-            alternativeEnemyStride = new List<Image>();
-            Isquadron.CreateEnemies(enemyStride, alternativeEnemyStride);
-            enemy = new Enemy(new DynamicShape(0.0f, 0.0f, 1.0f, 1.0f), 
-                              enemyStride, alternativeEnemyStride);
+        public void Setup() {
+            List<Image> images = ImageStride.CreateStrides
+                (4, Path.Combine("Assets", "Images", "BlueMonster.png"));
+            
+            List<Image> enrageStride = ImageStride.CreateStrides
+                (2, Path.Combine("Assets","Images", "RedMonster.png"));
+
+            Enemy enemy = new Enemy(new DynamicShape(
+                            new Vec2F(0.45f, 0.9f - (float)i * 0.1f), 
+                            new Vec2F(0.1f, 0.1f)),
+                        new ImageStride(80, images));;
         }
-        
+
         [Test]
-        public void TestIsEnraged() {
-            enemy.Enrage();
-            Assert.That(enemy.ImageStride, Is.EqualTo(enemy.AlternativeImageStride));
+        public void TestIsEnraged(){
+            //Act
+            enemy.Enrage(enrageStride);
+            //Assert
+            Assert.AreEqual(true, enemy.isEnraged);
+        }
+        [Test]
+        public void TestEnragedMovementSpeed(){
+            //Act
+            enemy.Enrage(enrageStride);
+            //Assert
+            Assert.AreEqual(0.0009f, enemy.movement_speed);
+        }
+        [Test]
+        public void TestIncreasesMovementSpeed(){
+            //Act
+            enemy.IncreaseMS();
+            //Assert
+            Assert.AreEqual(0.0004f, enemy.movement_speed);
+        }
+        [Test]
+        public void TestEnemyStridesRedImage(){
+            //Act
+            enemy.Enrage(enrageStride);
+            //Assert
+            Assert.AreEqual(Image, enrageStride);
         }
     }
-} */
