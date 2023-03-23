@@ -17,8 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\galaga.csproj" />
-    <ProjectReference Include="..\..\dikuarcade\dikuarcade\dikuarcade.csproj" />
+    <ProjectReference Include="..\galaga\galaga.csproj" />
+    <ProjectReference Include="..\DIKUArcade\DIKUArcade\DIKUArcade.csproj" />
   </ItemGroup>
 
 </Project>
