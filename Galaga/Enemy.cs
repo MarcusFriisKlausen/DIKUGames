@@ -1,6 +1,5 @@
 using DIKUArcade.Entities;
 using DIKUArcade.Graphics;
-using System.IO;
 using System.Collections.Generic;
 using DIKUArcade.Math;
 
@@ -51,8 +50,8 @@ public class Enemy : Entity {
         Image = new ImageStride(80, enemyStridesRed);
         movement_speed = movement_speed * 3.0f; 
     }
-    public void IncreaseMS() {
-        movement_speed += 0.0001f;
+    public void IncreaseMS(int level) {
+        movement_speed += 0.0001f * ((float)level + 0.0001f);
     }
 
     /// <summary>

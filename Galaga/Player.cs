@@ -10,12 +10,21 @@ namespace Galaga {
     public class Player : IGameEventProcessor {
         private Entity entity;
         private DynamicShape shape;
+        public DynamicShape Shape {
+            get {return shape;}
+        }
         private float moveLeft;
         private float moveRight;
         private const float MOVEMENT_SPEED = 0.01f;
+        private GameEventBus eventBus;
 
         public Player(DynamicShape shape, IBaseImage image) {
             entity = new Entity(shape, image);
+
+            eventBus = GalagaBus.GetBus();
+            eventBus.Subscribe(GameEventType.InputEvent, this);
+            eventBus.Subscribe(GameEventType.PlayerEvent, this);
+
             this.shape = shape;
             this.moveLeft = 0.0f;
             this.moveRight = 0.0f;
