@@ -183,7 +183,6 @@ public class GameRunning : IGameState {
     }
 
     public void HandleKeyEvent(KeyboardAction action, KeyboardKey key) {
-        Console.WriteLine($"Handling key event: action={action}, key={key}");
         if (action == KeyboardAction.KeyRelease){
                 KeyRelease(key);
             }
