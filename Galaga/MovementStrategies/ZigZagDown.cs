@@ -15,7 +15,7 @@ namespace Galaga.MovementStrategy {
 
             enemy.Shape.Position.Y = y_1;
 
-            if (!enemy.IsMovingLeft && enemy.Shape.Position.X + x_1 + enemy.Shape.Extent.X >= 1.0f) {
+            if (!enemy.IsMovingLeft && enemy.Shape.Position.X + x_1 + enemy.Shape.Extent.X >= 1.0f){
                 x_1 = enemy.Shape.Position.X - (x_0 + x_1);
                 enemy.SwapDirection();
             } else if (enemy.IsMovingLeft && enemy.Shape.Position.X + x_1 <= 0.0f) {

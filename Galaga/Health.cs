@@ -4,9 +4,13 @@ using DIKUArcade.Entities;
 using DIKUArcade.Graphics;
 using DIKUArcade.Math;
 using DIKUArcade.Input;
+
 namespace Galaga;
 public class Health {
     private int health;
+    public int HEALTH {
+        get { return health; }
+    }
     public bool gameOver = false;
     public Text display;
     public Health (Vec2F position, Vec2F extent) {

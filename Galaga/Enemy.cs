@@ -51,7 +51,7 @@ public class Enemy : Entity {
         movement_speed = movement_speed * 3.0f; 
     }
     public void IncreaseMS(int level) {
-        movement_speed += 0.0001f * ((float)level + 0.0001f);
+        movement_speed += 0.0001f * ((float)level);
     }
 
     /// <summary>

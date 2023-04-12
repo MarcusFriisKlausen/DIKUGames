@@ -78,6 +78,10 @@ namespace Galaga {
             return this.shape.Position;
         }
 
+        public float GetMS() {
+            return MOVEMENT_SPEED;
+        }
+
         public void ProcessEvent(GameEvent gameEvent) {
             if (gameEvent.Message == KeyboardKey.Left.ToString()) {
                     this.SetMoveLeft(true);

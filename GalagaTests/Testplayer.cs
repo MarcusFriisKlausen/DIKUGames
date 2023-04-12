@@ -1,7 +1,9 @@
-using galagaTests.Player;
 using DIKUArcade.Graphics;
 using DIKUArcade.Input;
 using Galaga;
+using DIKUArcade.Math;
+using DIKUArcade.Entities;
+using DIKUArcade.Events;
 
 namespace galagaTests;
     [TestFixture]
@@ -9,18 +11,20 @@ namespace galagaTests;
         [SetUp]
         public void Setup(){
             DIKUArcade.GUI.Window.CreateOpenGLContext();
-            GalagaBus.CreateBus();
+            GalagaBus.GetBus();
             
-            Player player = new player(new DynamicShape(new Vec2F(0.45f, 0.1f), new Vec2F(0.1f, 0.1f)),
+            Player player = new Player(new DynamicShape(new Vec2F(0.45f, 0.1f), new Vec2F(0.1f, 0.1f)),
             new Image(Path.Combine("Assets", "Images", "Player.png")));
             
             GalagaBus.GetBus().Subscribe(GameEventType.PlayerEvent, player);
         }
 
+        private Player player;
+
         [Test]
         public void TestGetPosition(){
             //Act
-            Vec2F pos = player.shape.Position;
+            Vec2F pos = player.Shape.Position;
             //Assert
             Assert.AreEqual(pos, player.GetPosition());
         }
@@ -32,13 +36,13 @@ namespace galagaTests;
             goLeft.EventType = GameEventType.PlayerEvent;
             goLeft.Message = KeyboardKey.Left.ToString();
 
-            Vec2F posX = player.shape.Position.X;
+            float posX = player.Shape.Position.X;
             //Act
             player.ProcessEvent(goLeft);
             player.Move();
 
-            Vec2F newPosX = player.shape.Position.X;
+            float newPosX = player.Shape.Position.X;
             //Assert
-            Assert.AreEqual(posX - player.MOVEMENT_SPEED, newPosX);
+            Assert.AreEqual(posX - player.GetMS(), newPosX);
         }
     }

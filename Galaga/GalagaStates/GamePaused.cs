@@ -27,11 +27,12 @@ public class GamePaused : IGameState {
 
     public GamePaused() {
         menuButtons = new Text[] {
-                new Text("PAUSED", new Vec2F(0.35f, 0.2f), new Vec2F(0.5f, 0.5f)),
-                new Text("Continue", new Vec2F(0.35f, 0.1f), new Vec2F(0.5f, 0.5f)),
-                new Text("Quit", new Vec2F(0.42f, 0.0f), new Vec2F(0.5f, 0.5f))
-            };
-        maxMenuButtons = 2;
+            new Text("PAUSED", new Vec2F(0.35f, 0.2f), new Vec2F(0.5f, 0.5f)),
+            new Text("Continue", new Vec2F(0.35f, 0.1f), new Vec2F(0.5f, 0.5f)),
+            new Text("Quit", new Vec2F(0.42f, 0.0f), new Vec2F(0.5f, 0.5f)),
+            new Text("Main Menu", new Vec2F(0.35f, -0.1f), new Vec2F(0.5f, 0.5f))
+        };
+        maxMenuButtons = 3;
         minMenuButtons = 1;
     }
     public void ResetState() {
@@ -46,8 +47,9 @@ public class GamePaused : IGameState {
 
     public void UpdateState() {
         GalagaBus.GetBus().ProcessEvents();
-        
-        menuButtons[activeMenuButton].SetColor(255, 1, 1, 255);
+        if (activeMenuButton >= minMenuButtons && activeMenuButton <= maxMenuButtons) {
+            menuButtons[activeMenuButton].SetColor(255, 1, 1, 255);
+        }
         for (int i = 0; i < menuButtons.Length; i++) {
             if (menuButtons[i] != menuButtons[activeMenuButton]) {
                 menuButtons[i].SetColor(255, 255, 255, 255);
@@ -57,6 +59,9 @@ public class GamePaused : IGameState {
     }
 
     public void HandleKeyEvent(KeyboardAction action, KeyboardKey key) {
+        if (action == KeyboardAction.KeyRelease){
+            return;
+        }
         if (key == KeyboardKey.Enter) {
             if (menuButtons[activeMenuButton].Equals(menuButtons[1])) {
                 GameEvent returnToGame = new GameEvent();
@@ -64,7 +69,13 @@ public class GamePaused : IGameState {
                 returnToGame.Message = "GAME_RUNNING";
                 GalagaBus.GetBus().RegisterEvent(returnToGame);
                 }
-            else {
+            if (menuButtons[activeMenuButton].Equals(menuButtons[2])) {
+                GameEvent quit = new GameEvent();
+                quit.EventType = GameEventType.WindowEvent;
+                quit.Message = "QUIT";
+                GalagaBus.GetBus().RegisterEvent(quit);
+            }
+            if (menuButtons[activeMenuButton].Equals(menuButtons[3])) {
                 GameEvent returnToMenu = new GameEvent();
                 returnToMenu.EventType = GameEventType.GameStateEvent;
                 returnToMenu.Message = "MAIN_MENU";
@@ -73,11 +84,13 @@ public class GamePaused : IGameState {
                 GameRunning.GetInstance().ResetState();
             }
         }
-        if (key == KeyboardKey.Down) {
-                activeMenuButton = Math.Min(activeMenuButton + 1, maxMenuButtons);
+        if (key == KeyboardKey.Down && activeMenuButton < maxMenuButtons) {
+                activeMenuButton = activeMenuButton + 1;
+                return;
         }
-        if (key == KeyboardKey.Up) {
-                activeMenuButton = Math.Max(activeMenuButton - 1, minMenuButtons);
+        if (key == KeyboardKey.Up && activeMenuButton > minMenuButtons) {
+                activeMenuButton = activeMenuButton - 1;
+                return;
         }
     }
 }

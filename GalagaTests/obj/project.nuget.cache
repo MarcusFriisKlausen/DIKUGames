@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "WDugSzlQRFPksRIUwoYkNHsQ3XOhCiQI1heG18OrSqf0IAiOzQa7//QvOQa6qF+vNDRjkN+40ZxfYxjA7p21tA==",
+  "dgSpecHash": "RSA8ip26gBPijCkwdgLCQrWcp4O6guauXWR1lHd0bN+TvOsj6XNS8S4TctkRf/YOepTc/eVPQRllbj4VVTZC+w==",
   "success": true,
-  "projectFilePath": "D:\\marcu\\DIKUGames\\galagaTests\\galagaTests.csproj",
+  "projectFilePath": "D:\\marcu\\DIKUGames\\galagaTests\\GalagaTests.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\marcu\\.nuget\\packages\\coverlet.collector\\3.1.2\\coverlet.collector.3.1.2.nupkg.sha512",
     "C:\\Users\\marcu\\.nuget\\packages\\microsoft.codecoverage\\17.1.0\\microsoft.codecoverage.17.1.0.nupkg.sha512",

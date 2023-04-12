@@ -1,4 +1,5 @@
-using galagaTests.Galagastates;
+using Galaga;
+using Galaga.GalagaStates;
 
 namespace galagaTests;
 [TestFixture]
@@ -6,24 +7,25 @@ public class TestTransformToString{
 
     [SetUp]
     public void SetUp(){
-        stateTrans = new StateTransformer();
     }
+
+    private string a = "";
 
     [Test]
     public void TestRunning(){
-        a = stateTrans.TransformStateToString(GameRunning);
+        a = StateTransformer.TransformStateToString(GameStateType.GameRunning);
         Assert.AreEqual("GAME_RUNNING", a);
     }
 
     [Test]
     public void TestPaused(){
-        a = stateTrans.TransformStateToString(GamePaused);
+        a = StateTransformer.TransformStateToString(GameStateType.GamePaused);
         Assert.AreEqual("GAME_PAUSED", a);
     }
 
     [Test]
     public void TestMenu(){
-        a = stateTrans.TransformStateToString(MainMenu);
+        a = StateTransformer.TransformStateToString(GameStateType.MainMenu);
         Assert.AreEqual("MAIN_MENU", a);
     }
 }

@@ -1,4 +1,5 @@
-using galagaTests.Galagastates;
+using Galaga.GalagaStates;
+using DIKUArcade.State;
 
 namespace galagaTests;
 [TestFixture]
@@ -6,24 +7,29 @@ public class TestTransformToState{
 
     [SetUp]
     public void SetUp(){
-        stateTrans = new StateTransformer();
     }
+
+    private GameStateType a;
+    private GameStateType gameRunning = GameStateType.GameRunning;
+    private GameStateType gamePaused = GameStateType.GamePaused;
+    private GameStateType mainMenu = GameStateType.MainMenu;
+
 
     [Test]
     public void TestRunning(){
-        a = stateTrans.TransformStringToState("GAME_RUNNING");
-        Assert.AreEqual(GameRunning, a);
+        a = StateTransformer.TransformStringToState("GAME_RUNNING");
+        Assert.AreEqual(gameRunning, a);
     }
 
     [Test]
     public void TestPaused(){
-        a = stateTrans.TransformStringToState("GAME_PAUSED");
-        Assert.AreEqual(GamePaused, a);
+        a = StateTransformer.TransformStringToState("GAME_PAUSED");
+        Assert.AreEqual(gamePaused, a);
     }
 
     [Test]
     public void TestMenu(){
-        a = stateTrans.TransformStringToState("MAIN_MENU");
-        Assert.AreEqual(MainMenu, a);
+        a = StateTransformer.TransformStringToState("MAIN_MENU");
+        Assert.AreEqual(mainMenu, a);
     }
 }
