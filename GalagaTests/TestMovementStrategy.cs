@@ -1,6 +1,8 @@
-using galagaTests.IMovementStrategy;
 using DIKUArcade.Math;
 using Galaga;
+using DIKUArcade.Graphics;
+using DIKUArcade.Entities;
+using Galaga.MovementStrategy;
 
 namespace galagaTests;
     [TestFixture]
@@ -11,7 +13,7 @@ namespace galagaTests;
                 (4, Path.Combine("Assets", "Images", "BlueMonster.png"));
 
             Enemy enemy = new Enemy(new DynamicShape(
-                            new Vec2F(0.45f, 0.9f - (float)i * 0.1f), 
+                            new Vec2F(0.45f, 0.9f - 0.1f), 
                             new Vec2F(0.1f, 0.1f)),
                         new ImageStride(80, images));;
             
@@ -20,10 +22,15 @@ namespace galagaTests;
             ZigZagDown zigZag = new ZigZagDown();
         }
 
+        private Enemy enemy;
+        private NoMove noMove;
+        private Down down;
+        private ZigZagDown zigZag;
+
         [Test]
         public void TestNoMove(){
             //Arrange
-            float startY = enemy.startPos.Y;
+            float startY = enemy.StartPos.Y;
             float posY = enemy.Shape.Position.Y;
             //Act
             noMove.MoveEnemy(enemy);
@@ -48,7 +55,7 @@ namespace galagaTests;
             float x = enemy.StartPos.X;
             //Act
             zigZag.MoveEnemy(enemy);
-            float newX = enemy.Position;
+            float newX = enemy.Shape.Position.X;
             //Assert
             Assert.AreEqual(enemy.StartPos.X + (float)(0.05f * Math.Sin((2.0 * Math.PI * 
                 (y_0 - y_1)) / 0.045f)), newX);

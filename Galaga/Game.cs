@@ -6,8 +6,7 @@ using System.Collections.Generic;
 
 using Galaga.GalagaStates;
 
-namespace Galaga
-{
+namespace Galaga{
     public class Game : DIKUGame, IGameEventProcessor{
         
         private StateMachine stateMachine;
@@ -30,10 +29,6 @@ namespace Galaga
         }   
 
         private void KeyHandler(KeyboardAction action, KeyboardKey key) {
-            if (action == KeyboardAction.KeyPress && key == KeyboardKey.Escape && (stateMachine.ActiveState == GameLost.GetInstance() || 
-                stateMachine.ActiveState == GamePaused.GetInstance())) {
-                window.CloseWindow();
-            }
             stateMachine.ActiveState.HandleKeyEvent(action, key);
         }
 

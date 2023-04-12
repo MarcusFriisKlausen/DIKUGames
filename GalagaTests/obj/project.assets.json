@@ -4461,9 +4461,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\marcu\\DIKUGames\\galagaTests\\galagaTests.csproj",
-      "projectName": "galagaTests",
-      "projectPath": "D:\\marcu\\DIKUGames\\galagaTests\\galagaTests.csproj",
+      "projectUniqueName": "D:\\marcu\\DIKUGames\\galagaTests\\GalagaTests.csproj",
+      "projectName": "GalagaTests",
+      "projectPath": "D:\\marcu\\DIKUGames\\galagaTests\\GalagaTests.csproj",
       "packagesPath": "C:\\Users\\marcu\\.nuget\\packages\\",
       "outputPath": "D:\\marcu\\DIKUGames\\galagaTests\\obj\\",
       "projectStyle": "PackageReference",
@@ -4539,5 +4539,5 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.400\\RuntimeIdentifierGraph.json"
       }
     }
-  
+  }
 }

@@ -75,6 +75,7 @@ public class MainMenu : IGameState {
                     newGame.EventType = GameEventType.GameStateEvent;
                     newGame.Message = "GAME_RUNNING";
                     GalagaBus.GetBus().RegisterEvent(newGame);
+                    
                 }
                 else if (menuButtons[activeMenuButton].Equals(menuButtons[1])) {
                     GameEvent quit = new GameEvent();

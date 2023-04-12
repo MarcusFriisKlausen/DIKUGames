@@ -1,5 +1,8 @@
+using Galaga;
+using DIKUArcade;
 using Galaga.GalagaStates;
-using DIKUArcade.EvenBus;
+using DIKUArcade.GUI;
+using DIKUArcade.Events;
 
 namespace galagaTests;
 [TestFixture]
@@ -8,8 +11,8 @@ public class StateMachineTest{
 
     [SetUp]
     public void InitiateStateMachine() {
-        DIKUArcade.Window.CreateOpenGLContext();
-        GalagaBus.CreateBus();
+        DIKUArcade.GUI.Window.CreateOpenGLContext();
+        GalagaBus.GetBus();
         stateMachine = new StateMachine();
         GalagaBus.GetBus().Subscribe(GameEventType.GameStateEvent, stateMachine);
     }
