@@ -14,6 +14,7 @@ public class GameRunning : IGameState {
     // private Health health;
     private static GameRunning? instance;
     private GameEventBus eventBus;
+    private LevelLoader levelLoader;
     public static GameRunning GetInstance() {
         if (GameRunning.instance == null) {
             GameRunning.instance = new GameRunning();
@@ -37,6 +38,10 @@ public class GameRunning : IGameState {
         eventBus = BreakoutBus.GetBus();
         eventBus.Subscribe(GameEventType.PlayerEvent, player);
         eventBus.Subscribe(GameEventType.InputEvent, player);
+
+        levelLoader = new LevelLoader();
+
+        blocks = levelLoader.LevelMaker();
     }
 
     private void InitGame() {
@@ -46,7 +51,7 @@ public class GameRunning : IGameState {
                 new Image(Path.Combine("Assets", "Images", "SpaceBackground.png")));
 
         player = new Player(
-            new DynamicShape(new Vec2F(0.45f, 0.1f), new Vec2F(0.1f, 0.02f)),
+            new DynamicShape(new Vec2F(0.45f, 0.1f), new Vec2F(0.15f, 0.02f)),
             new Image(Path.Combine("Assets", "Images", "player.png")));
 
         // BreakoutBus Subscriptions
@@ -89,7 +94,7 @@ public class GameRunning : IGameState {
     public void RenderState() {
         backGroundImage.RenderEntity();
         player.Render();
-        // blocks.RenderEntities();
+        blocks.RenderEntities();
         // health.RenderHealth();
     }
 
