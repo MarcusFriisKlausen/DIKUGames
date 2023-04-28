@@ -41,7 +41,7 @@ public class GameRunning : IGameState {
 
         levelLoader = new LevelLoader();
 
-        blocks = levelLoader.LevelMaker();
+        blocks = levelLoader.LevelMaker(levelLoader.currentMap);
     }
 
     private void InitGame() {
