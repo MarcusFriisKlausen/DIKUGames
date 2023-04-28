@@ -1,6 +1,7 @@
 using DIKUArcade.Entities;
 using DIKUArcade.Math;
 using DIKUArcade.Graphics;
+using DIKUArcade.Utilities;
 
 using Breakout.Blocks;
 namespace Breakout{
@@ -8,15 +9,17 @@ namespace Breakout{
         // nullImage is used as a placeholder for the block images
         private Image nullImage = new Image(
             Path.Combine("Assets", "Images", "deep-bronze-square.png"));
-        private StreamReader nextMap = new StreamReader(@"Assets/Levels/level2.txt");
-        private StreamReader currentMap = new StreamReader(@"Assets/Levels/level1.txt");
+        public StreamReader nextMap = new StreamReader(Path.Combine(
+            Constants.MAIN_PATH, "Assets","Levels","level2.txt"));
+        public StreamReader currentMap = new StreamReader(Path.Combine(
+            Constants.MAIN_PATH, "Assets","Levels","level1.txt"));
 
-        private List<string> LevelListMaker() {
+        private List<string> LevelListMaker(StreamReader map) {
             List<string> lineList = new List<string>();
             try {
-                using (currentMap) {
+                using (map) {
                     string? line;
-                    while ((line = currentMap.ReadLine()) != "Map/") {
+                    while ((line = map.ReadLine()) != "Map/") {
                         if (line != null) {
                             lineList.Add(line);
                         }
@@ -29,9 +32,9 @@ namespace Breakout{
             return lineList;
         }
         // - 0.04f*(float)i
-        public EntityContainer<Entity> LevelMaker() {
+        public EntityContainer<Entity> LevelMaker(StreamReader map) {
             EntityContainer<Entity> blockMap = new EntityContainer<Entity>();
-            List<string> level = LevelListMaker();
+            List<string> level = LevelListMaker(map);
             for (int j = 0; j < level.Count; j++) {
                 for (int i = 0; i < level[j].Length; i++) { 
                     switch((level[j])[i]) {
@@ -97,7 +100,8 @@ namespace Breakout{
             }
 
             currentMap = nextMap;
-            nextMap = new StreamReader(@"Assets/Levels/level3.txt");
+            nextMap = new StreamReader(Path.Combine(
+                Constants.MAIN_PATH, "Assets","Levels","level3.txt"));
 
             return blockMap;
         }

@@ -17,8 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Breakout\Breakout.csproj" />
-    <ProjectReference Include="..\DIKUArcade\DIKUArcade\DIKUArcade.csproj" />
+    <ProjectReference Include="..\galaga.csproj" />
+    <ProjectReference Include="..\..\dikuarcade\dikuarcade\dikuarcade.csproj" />
   </ItemGroup>
 
 </Project>
