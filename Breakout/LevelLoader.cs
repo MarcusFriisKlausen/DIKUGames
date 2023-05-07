@@ -102,13 +102,13 @@ public class LevelLoader {
         if (currentMap == new StreamReader(@"Assets/Levels/level2.txt")) {
             nextMap = new StreamReader(@"Assets/Levels/level3.txt");
         }
-        if (currentMap == new StreamReader(@"Assets/Levels/level3.txt")) {
+        else if (currentMap == new StreamReader(@"Assets/Levels/level3.txt")) {
             nextMap = new StreamReader(@"Assets/Levels/columns.txt");
         }
-        if (currentMap == new StreamReader(@"Assets/Levels/columns.txt")) {
+        else if (currentMap == new StreamReader(@"Assets/Levels/columns.txt")) {
             nextMap = new StreamReader(@"Assets/Levels/wall.txt");
         }
-        if (currentMap == new StreamReader(@"Assets/Levels/wall.txt")) {
+        else if (currentMap == new StreamReader(@"Assets/Levels/wall.txt")) {
             nextMap = new StreamReader(@"Assets/Levels/central-mass.txt");
         }
         else {
@@ -116,7 +116,6 @@ public class LevelLoader {
             returnToMenu.EventType = GameEventType.GameStateEvent;
             returnToMenu.Message = "MAIN_MENU";
             BreakoutBus.GetBus().RegisterEvent(returnToMenu);
-            GameRunning.GetInstance().ResetState();
         }
     return blockMap;
     }
