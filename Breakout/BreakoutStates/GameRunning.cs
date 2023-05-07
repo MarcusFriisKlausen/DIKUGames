@@ -4,6 +4,7 @@ using DIKUArcade.Math;
 using DIKUArcade.Events;
 using DIKUArcade.Input;
 using DIKUArcade.State;
+using DIKUArcade.Physics;
 
 namespace Breakout.BreakoutStates;
 
@@ -11,6 +12,7 @@ public class GameRunning : IGameState {
     private Entity backGroundImage;
     private Player player;
     private EntityContainer<Entity> blocks;
+    private Ball ball;
     // private Health health;
     private static GameRunning? instance;
     private GameEventBus eventBus;
@@ -42,6 +44,10 @@ public class GameRunning : IGameState {
         levelLoader = new LevelLoader();
 
         blocks = levelLoader.LevelMaker(levelLoader.currentMap);
+
+        ball = new Ball(
+            new DynamicShape(new Vec2F(0.485f, 0.15f), new Vec2F(0.03f, 0.03f)),
+            new Image(Path.Combine("Assets", "Images", "ball.png")));
     }
 
     private void InitGame() {
@@ -61,8 +67,23 @@ public class GameRunning : IGameState {
         
         // Health
         // health = new Health(new Vec2F(0.0f, -0.2f), new Vec2F(0.3f, 0.32f));
+
+        ball = new Ball(
+            new DynamicShape(new Vec2F(0.485f, 0.15f), new Vec2F(0.03f, 0.03f)),
+            new Image(Path.Combine("Assets", "Images", "ball.png")));
     }
-        
+
+        private void LosBreakosBlocksos() {
+            blocks.Iterate(block => {
+                var blockShape = block.Shape;
+                var ballShape = ball.Shape;
+                var colData = CollisionDetection.Aabb(ballShape.AsDynamicShape(), blockShape);
+                if (colData.Collision == true) {
+                    block.DeleteEntity();
+                } 
+            });
+            RemoveEntities(blocks);
+        }
         public EntityContainer<Entity> RemoveEntities(EntityContainer<Entity> container){
             var count = container.CountEntities();
             EntityContainer<Entity> newCont = new EntityContainer<Entity>(count);
@@ -87,6 +108,8 @@ public class GameRunning : IGameState {
     public void UpdateState() {
         eventBus.ProcessEventsSequentially();
         player.Move();
+        ball.Move(blocks, player);
+        // LosBreakosBlocksos();
         // HealthUpdate();
 
     }
@@ -95,6 +118,7 @@ public class GameRunning : IGameState {
         backGroundImage.RenderEntity();
         player.Render();
         blocks.RenderEntities();
+        ball.RenderEntity();
         // health.RenderHealth();
     }
 
