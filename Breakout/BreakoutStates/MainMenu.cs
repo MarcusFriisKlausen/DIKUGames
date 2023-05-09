@@ -38,6 +38,7 @@ public class MainMenu : IGameState {
         maxMenuButtons = menuButtons.Length;
     }
     public void ResetState() {
+        //GameRunning.InitGame();
     }
 
     public void UpdateState() {

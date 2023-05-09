@@ -13,7 +13,7 @@ public class GameRunning : IGameState {
     private Player player;
     private EntityContainer<Entity> blocks;
     private Ball ball;
-    // private Health health;
+    //private Health health;
     private static GameRunning? instance;
     private GameEventBus eventBus;
     private LevelLoader levelLoader;
@@ -24,6 +24,7 @@ public class GameRunning : IGameState {
         }
         return GameRunning.instance;
     }
+    //public void InitGame();
 
     public GameRunning() {
         backGroundImage = new Entity(new StationaryShape(
@@ -47,7 +48,7 @@ public class GameRunning : IGameState {
 
         ball = new Ball(
             new DynamicShape(new Vec2F(0.485f, 0.15f), new Vec2F(0.03f, 0.03f)),
-            new Image(Path.Combine("Assets", "Images", "ball.png")));
+            new Image(Path.Combine("Assets", "Images", "ball.png")));    
     }
 
     private void InitGame() {
@@ -120,6 +121,7 @@ public class GameRunning : IGameState {
         blocks.RenderEntities();
         ball.RenderEntity();
         // health.RenderHealth();
+
     }
 
     public void HandleKeyEvent(KeyboardAction action, KeyboardKey key) {
