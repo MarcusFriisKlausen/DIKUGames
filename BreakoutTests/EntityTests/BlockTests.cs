@@ -83,7 +83,7 @@ namespace TestBlocks;
 
         [Test]
         // Testing if the blocks have the correct image
-        public void testIsImageCorrect() {
+        public void TestIsImageCorrect() {
             
             Assert.That(blueBlock.image, Is.EqualTo(blueBlock.Image));
             Assert.That(brownBlock.image, Is.EqualTo(brownBlock.Image));

@@ -26,7 +26,7 @@ namespace TestPlayer;
 
         [Test]
         //Testing if the player is in the window
-        public void testPlayerIsInWindow(){
+        public void TestPlayerIsInWindow(){
             Assert.That(player.Shape.Position.X, Is.EqualTo(0.45f));
             Assert.That(player.Shape.Position.Y, Is.EqualTo(0.1f));
         }
@@ -34,7 +34,7 @@ namespace TestPlayer;
         [Test]
         // Moving the player to the left for a sufficiently long time, and checking
         // that is is placed by the border of the window, but still inside
-        public void testPlayerCantMoveOutOfWindow(){
+        public void TestPlayerCantMoveOutOfWindow(){
              //Arrange
             GameEvent goLeft = new GameEvent();
             goLeft.EventType = GameEventType.PlayerEvent;
@@ -53,7 +53,7 @@ namespace TestPlayer;
 
         [Test]
         // Testing if the player can move left
-        public void testPlayerMoveLeft(){
+        public void TestPlayerMoveLeft(){
             //Arrange
             GameEvent goLeft = new GameEvent();
             goLeft.EventType = GameEventType.PlayerEvent;
@@ -71,7 +71,7 @@ namespace TestPlayer;
         
         [Test]
         //Testing if the player can move right
-        public void testPlayerMoveRight(){
+        public void TestPlayerMoveRight(){
             //Arrange
             GameEvent goRight = new GameEvent();
             goRight.EventType = GameEventType.PlayerEvent;

@@ -2,7 +2,10 @@ using DIKUArcade.Graphics;
 
 namespace Breakout{
     public interface IBlock {
-        IBaseImage image {get;}
-        IBaseImage brokenImage {get;}
+        // bool CanBeDestoyed {get;}
+        int MaxHealth {get;}
+        int Health {get; set;}
+        IBaseImage Image {get; set;}
+        IBaseImage BrokenImage {get;}
     }
 }

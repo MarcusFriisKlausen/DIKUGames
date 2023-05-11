@@ -11,7 +11,7 @@ namespace Breakout.BreakoutStates;
 public class GameRunning : IGameState {
     private Entity backGroundImage;
     private Player player;
-    private EntityContainer<Entity> blocks;
+    private EntityContainer<Block> blocks;
     private Ball ball;
     // private Health health;
     private static GameRunning? instance;
@@ -55,7 +55,7 @@ public class GameRunning : IGameState {
                 new Vec2F(0.0f, 0.0f),
                 new Vec2F(1.0f, 1.0f)),
                 new Image(Path.Combine("Assets", "Images", "SpaceBackground.png")));
-
+        
         player = new Player(
             new DynamicShape(new Vec2F(0.45f, 0.1f), new Vec2F(0.15f, 0.02f)),
             new Image(Path.Combine("Assets", "Images", "player.png")));
@@ -67,6 +67,10 @@ public class GameRunning : IGameState {
         
         // Health
         // health = new Health(new Vec2F(0.0f, -0.2f), new Vec2F(0.3f, 0.32f));
+
+        levelLoader = new LevelLoader();
+
+        blocks = levelLoader.LevelMaker(levelLoader.currentMap);
 
         ball = new Ball(
             new DynamicShape(new Vec2F(0.485f, 0.15f), new Vec2F(0.03f, 0.03f)),
@@ -84,11 +88,11 @@ public class GameRunning : IGameState {
             });
             RemoveEntities(blocks);
         }
-        public EntityContainer<Entity> RemoveEntities(EntityContainer<Entity> container){
+        public EntityContainer<Block> RemoveEntities(EntityContainer<Block> container){
             var count = container.CountEntities();
-            EntityContainer<Entity> newCont = new EntityContainer<Entity>(count);
+            EntityContainer<Block> newCont = new EntityContainer<Block>(count);
 
-            foreach (Entity ent in container) {
+            foreach (Block ent in container) {
                 if (!ent.IsDeleted()) {
                     newCont.AddEntity(ent);
                 }

@@ -30,7 +30,7 @@ namespace TestLevelLoader;
         [Test]
         // Testing if LevelMaker can make a map correctly from a file, 
         // checking the first and last block
-        public void testCanMakeosLosMapos() {
+        public void TestCanMakeosLosMapos() {
             List<Entity> blockLst = new List<Entity>();
 
             foreach (Entity block in levelLoader.LevelMaker(level)) {
