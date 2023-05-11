@@ -20,44 +20,19 @@ public class Ball : Entity {
     }
 
     public EntityContainer<Entity> RemoveEntities(EntityContainer<Block> container){
-            var count = container.CountEntities();
-            EntityContainer<Entity> newCont = new EntityContainer<Entity>(count);
-
-            foreach (Entity ent in container) {
-                if (!ent.IsDeleted()) {
-                    newCont.AddEntity(ent);
-                }
+        var count = container.CountEntities();
+        EntityContainer<Entity> newCont = new EntityContainer<Entity>(count);
+        foreach (Entity ent in container) {
+            if (!ent.IsDeleted()) {
+                newCont.AddEntity(ent);
             }
-            return newCont;
         }
+        return newCont;
+    }
 
-<<<<<<< Updated upstream
-    private void ChangeDir(EntityContainer<Entity> cont, Player p) {
-        // cont.Iterate(ent => {    
-        //     var entShape = ent.Shape;
-        //     var dataEnt = CollisionDetection.Aabb(Shape.AsDynamicShape(), entShape);
-        //     if (dataEnt.Collision == true){
-        //         ent.DeleteEntity();
-        //         if (dataEnt.CollisionDir == CollisionDirection.CollisionDirLeft) {
-        //             movementVec = new Vec2F(movementVec.X*(-1), movementVec.Y);
-        //         } else if (dataEnt.CollisionDir == CollisionDirection.CollisionDirRight) {
-        //             movementVec = new Vec2F(movementVec.X*(-1), movementVec.Y);
-        //         } else if (dataEnt.CollisionDir == CollisionDirection.CollisionDirUp) {
-        //             movementVec = new Vec2F(movementVec.X, movementVec.Y*(-1));
-        //         } else if (dataEnt.CollisionDir == CollisionDirection.CollisionDirDown) {
-        //             movementVec = new Vec2F(movementVec.X, movementVec.Y*(-1));
-        //         }
-        //     }
-        // });
-        ChangeDirRight(cont, p);
-        ChangeDirLeft(cont, p);
-        ChangeDirUp(cont, p);
-        ChangeDirDown(cont, p);
-=======
     private void ChangeDir(EntityContainer<Block> cont, Player p) {
         ChangeDirRightLeft(cont, p);
         ChangeDirUpDown(cont, p);
->>>>>>> Stashed changes
 
         RemoveEntities(cont);
 
@@ -86,36 +61,14 @@ public class Ball : Entity {
                 movementVec = new Vec2F(movementVec.X, movementVec.Y*(-1));
             }
         }
-
-<<<<<<< Updated upstream
-        if (Shape.Position.X <= 0.0f || Shape.Position.X >= 1.0f - Shape.Extent.X) {
-            movementVec = new Vec2F(movementVec.X*(-1), movementVec.Y);
-        }
-        if (Shape.Position.Y >= 1.0f - Shape.Extent.Y) {
-            movementVec = new Vec2F(movementVec.X, movementVec.Y*(-1));
-        }
     }
-    public void Move(EntityContainer<Entity> cont, Player p) {
-=======
+
     public void Move(EntityContainer<Block> cont, Player p) {
->>>>>>> Stashed changes
         ChangeDir(cont, p);
         Shape.MoveX(movementVec.X);
         Shape.MoveY(movementVec.Y);
     }
 
-<<<<<<< Updated upstream
-    private void ChangeDirRight(EntityContainer<Entity> cont, Player p) {
-        cont.Iterate(ent => {    
-            var entShape = ent.Shape;
-            var dataEnt = CollisionDetection.Aabb(Shape.AsDynamicShape(), 
-                new DynamicShape(new Vec2F(entShape.Position.X + entShape.Extent.X, 
-                entShape.Position.Y), entShape.Extent));
-            if (dataEnt.Collision == true){
-                if (dataEnt.CollisionDir == CollisionDirection.CollisionDirRight) {
-                    ent.DeleteEntity();
-                    movementVec = new Vec2F(movementVec.X*(-1), movementVec.Y);
-=======
     // Changes the balls horizontal direction
     private void ChangeDirRightLeft(EntityContainer<Block> cont, Player p) {
         cont.Iterate(ent => {    
@@ -133,37 +86,11 @@ public class Ball : Entity {
                         Shape.AsDynamicShape().Direction = new Vec2F(
                             Shape.AsDynamicShape().Direction.X*(-1), 
                             Shape.AsDynamicShape().Direction.Y);
->>>>>>> Stashed changes
                 }
             }    
         });
     }
 
-<<<<<<< Updated upstream
-    private void ChangeDirLeft(EntityContainer<Entity> cont, Player p) {
-        cont.Iterate(ent => {    
-            var entShape = ent.Shape;
-            var dataEnt = CollisionDetection.Aabb(Shape.AsDynamicShape(), entShape);
-            if (dataEnt.Collision == true){
-                if (dataEnt.CollisionDir == CollisionDirection.CollisionDirLeft) {
-                    ent.DeleteEntity();
-                    movementVec = new Vec2F(movementVec.X*(-1), movementVec.Y);
-                }
-            }    
-        });
-    }
-
-    private void ChangeDirUp(EntityContainer<Entity> cont, Player p) {
-        cont.Iterate(ent => {    
-            var entShape = ent.Shape;
-            var dataEnt = CollisionDetection.Aabb(Shape.AsDynamicShape(), 
-                new DynamicShape(new Vec2F(entShape.Position.X, 
-                entShape.Position.Y), entShape.Extent));
-            if (dataEnt.Collision == true){
-                if (dataEnt.CollisionDir == CollisionDirection.CollisionDirUp) {
-                    ent.DeleteEntity();
-                    movementVec = new Vec2F(movementVec.X, movementVec.Y*(-1));
-=======
     // Changes the balls vertical direction 
     private void ChangeDirUpDown(EntityContainer<Block> cont, Player p) {
         cont.Iterate(ent => {    
@@ -181,25 +108,11 @@ public class Ball : Entity {
                         Shape.AsDynamicShape().Direction = new Vec2F(
                             Shape.AsDynamicShape().Direction.X, 
                             Shape.AsDynamicShape().Direction.Y*(-1));
->>>>>>> Stashed changes
                 } 
             }    
         });
     }
 
-<<<<<<< Updated upstream
-    private void ChangeDirDown(EntityContainer<Entity> cont, Player p) {
-        cont.Iterate(ent => {    
-            var entShape = ent.Shape;
-            var dataEnt = CollisionDetection.Aabb(Shape.AsDynamicShape(), entShape);
-            if (dataEnt.Collision == true){
-                if (dataEnt.CollisionDir == CollisionDirection.CollisionDirDown) {
-                    ent.DeleteEntity();
-                    movementVec = new Vec2F(movementVec.X, movementVec.Y*(-1));
-                }
-            }    
-        });
-=======
     private void HandlePaddleCollision(Player p) {
         var pShape = p.Shape;
         var dataPLeft = CollisionDetection.Aabb(
@@ -248,6 +161,5 @@ public class Ball : Entity {
             Shape.AsDynamicShape().Direction = 
             new Vec2F(Shape.AsDynamicShape().Direction.X, Shape.AsDynamicShape().Direction.Y*(-1));
         }
->>>>>>> Stashed changes
     }
 }
