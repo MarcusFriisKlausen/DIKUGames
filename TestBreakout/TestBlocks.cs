@@ -1,6 +1,5 @@
 using NUnit.Framework;
 using Breakout;
-using Breakout.Blocks;
 using Breakout.BreakoutStates;
 using DIKUArcade.Math;
 using DIKUArcade.Entities;
@@ -14,74 +13,24 @@ using System.Collections.Generic;
 namespace TestBlocks;
     [TestFixture]
     public class Tests {
-        BlueBlock blueBlock;
-        BrownBlock brownBlock;
-        DarkGreenBlock darkGreenBlock;
-        GreenBlock greenBlock;
-        GreyBlock greyBlock;
-        OrangeBlock orangeBlock;
-        PurpleBlock purpleBlock;
-        RedBlock redBlock;
-        TealBlock tealBlock;
-        YellowBlock yellowBlock;
-
+        BlockHardened hardened;
+        Block block;
+        BlockUnbreakable unbreakable;
         [SetUp]
         public void Setup(){
             DIKUArcade.GUI.Window.CreateOpenGLContext();
-
-            blueBlock = new BlueBlock(new DynamicShape(
-                        new Vec2F(((1f/12f)*(float)0), (1f - (float)0/25f)),
-                        new Vec2F(1f/12f, 1f/25f)), new Image(
-                            Path.Combine(
-                                "Assets", "Images", "deep-bronze-square.png")));
-            brownBlock = new BrownBlock(new DynamicShape(
-                            new Vec2F(((1f/12f)*(float)0), (1f - (float)0/25f)),
-                            new Vec2F(1f/12f, 1f/25f)), new Image(
-                                Path.Combine(
-                                    "Assets", "Images", "deep-bronze-square.png")));
-            darkGreenBlock = new DarkGreenBlock(new DynamicShape(
-                            new Vec2F(((1f/12f)*(float)0), (1f - (float)0/25f)),
-                            new Vec2F(1f/12f, 1f/25f)), new Image(
-                                Path.Combine(
-                                    "Assets", "Images", "deep-bronze-square.png")));
-            greenBlock = new GreenBlock(new DynamicShape(
-                            new Vec2F(((1f/12f)*(float)0), (1f - (float)0/25f)),
-                            new Vec2F(1f/12f, 1f/25f)), new Image(
-                                Path.Combine(
-                                    "Assets", "Images", "deep-bronze-square.png")));
-            greyBlock = new GreyBlock(new DynamicShape(
-                            new Vec2F(((1f/12f)*(float)0), (1f - (float)0/25f)),
-                            new Vec2F(1f/12f, 1f/25f)), new Image(
-                                Path.Combine(
-                                    "Assets", "Images", "deep-bronze-square.png")));
-            orangeBlock = new OrangeBlock(new DynamicShape(
-                            new Vec2F(((1f/12f)*(float)0), (1f - (float)0/25f)),
-                            new Vec2F(1f/12f, 1f/25f)), new Image(
-                                Path.Combine(
-                                    "Assets", "Images", "deep-bronze-square.png")));
-            purpleBlock = new PurpleBlock(new DynamicShape(
-                            new Vec2F(((1f/12f)*(float)0), (1f - (float)0/25f)),
-                            new Vec2F(1f/12f, 1f/25f)), new Image(
-                                Path.Combine(
-                                    "Assets", "Images", "deep-bronze-square.png")));
-            redBlock = new RedBlock(new DynamicShape(
-                            new Vec2F(((1f/12f)*(float)0), (1f - (float)0/25f)),
-                            new Vec2F(1f/12f, 1f/25f)), new Image(
-                                Path.Combine(
-                                    "Assets", "Images", "deep-bronze-square.png")));
-            tealBlock = new TealBlock(new DynamicShape(
-                            new Vec2F(((1f/12f)*(float)0), (1f - (float)0/25f)),
-                            new Vec2F(1f/12f, 1f/25f)), new Image(
-                                Path.Combine(
-                                    "Assets", "Images", "deep-bronze-square.png")));
-            yellowBlock = new YellowBlock(new DynamicShape(
-                            new Vec2F(((1f/12f)*(float)0), (1f - (float)0/25f)),
-                            new Vec2F(1f/12f, 1f/25f)), new Image(
-                                Path.Combine(
-                                    "Assets", "Images", "deep-bronze-square.png")));
+            DynamicShape blockShape = new DynamicShape(new Vec2F(((1f/12f)), 
+            (0.1f)), new Vec2F(1f/12f, 1f/25f)); 
+            hardened = new BlockHardened(blockShape, new Image(Path.Combine("Assets", "Images", "brown-block.png")), 
+                new Image(Path.Combine("Assets", "Images", "brown-block-damaged.png")));
+            unbreakable = new BlockUnbreakable(blockShape, new Image(Path.Combine("Assets", "Images", "brown-block.png")), 
+                new Image(Path.Combine("Assets", "Images", "brown-block-damaged.png")));
+            block = new BlockHardened(blockShape, new Image(Path.Combine("Assets", "Images", "brown-block.png")), 
+                new Image(Path.Combine("Assets", "Images", "brown-block-damaged.png")));
         }
 
         [Test]
+<<<<<<< Updated upstream:TestBreakout/TestBlocks.cs
         // Testing if the blocks have the correct image
         public void testIsImageCorrect() {
             
@@ -95,30 +44,26 @@ namespace TestBlocks;
             Assert.That(redBlock.image, Is.EqualTo(redBlock.Image));
             Assert.That(tealBlock.image, Is.EqualTo(tealBlock.Image));
             Assert.That(yellowBlock.image, Is.EqualTo(yellowBlock.Image));
+=======
+        public void TestLosingHealthBlock(){
+            block.LoseHealth();
+            int expectedHP = block.MaxHealth - 1;
+            Assert.AreEqual(block.Health, expectedHP);
+>>>>>>> Stashed changes:BreakoutTests/EntityTests/BlockTests.cs
         }
 
-        // public void testIsBrokenImageCorrect() {
-            
-        //     Assert.That(blueBlock.brokenImage, 
-        //         Is.EqualTo(blueBlock.BrokenImage));
-        //     Assert.That(brownBlock.brokenImage, 
-        //         Is.EqualTo(brownBlock.BrokenImage));
-        //     Assert.That(darkGreenBlock.brokenImage, 
-        //         Is.EqualTo(darkGreenBlock.BrokenImage));
-        //     Assert.That(greenBlock.brokenImage, 
-        //         Is.EqualTo(greenBlock.BrokenImage));
-        //     Assert.That(greyBlock.brokenImage, 
-        //         Is.EqualTo(greyBlock.BrokenImage));
-        //     Assert.That(orangeBlock.brokenImage, 
-        //         Is.EqualTo(orangeBlock.BrokenImage));
-        //     Assert.That(purpleBlock.brokenImage, 
-        //         Is.EqualTo(purpleBlock.BrokenImage));
-        //     Assert.That(redBlock.brokenImage, 
-        //         Is.EqualTo(redBlock.BrokenImage));
-        //     Assert.That(TealBlock.brokenImage, 
-        //         Is.EqualTo(TealBlock.BrokenImage));
-        //     Assert.That(yellowBlock.brokenImage, 
-        //         Is.EqualTo(yellowBlock.BrokenImage));
-            
-        // }
+        [Test]
+        public void TestLosingHealthHardened(){
+            System.Console.WriteLine(hardened.health);
+            hardened.LoseHealth();
+            int expectedHP = 1;
+            Assert.AreEqual(hardened.Health, expectedHP);
+        }
+
+        [Test]
+        public void TestLosingHealthUnbreakable(){
+            unbreakable.LoseHealth();
+            int expectedHP = unbreakable.MaxHealth;
+            Assert.AreEqual(unbreakable.Health, unbreakable.MaxHealth);
+        }
     }

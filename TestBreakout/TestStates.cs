@@ -1,6 +1,5 @@
 using NUnit.Framework;
 using Breakout;
-using Breakout.Blocks;
 using Breakout.BreakoutStates;
 using DIKUArcade.Math;
 using DIKUArcade.Entities;
