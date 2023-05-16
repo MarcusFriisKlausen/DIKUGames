@@ -1,15 +1,13 @@
 using DIKUArcade.Entities;
 using DIKUArcade.Math;
 using DIKUArcade.Graphics;
-using DIKUArcade.Utilities;
-using Breakout.BreakoutStates;
 using DIKUArcade.Events;
-using System.Runtime;
 
 namespace Breakout;
 public class LevelLoader {
     private string[] fileEntries = Directory.GetFiles(Path.Combine("Assets", "Levels"));
     private int mapLevel = 0;
+    public Timer? timer;
     public StreamReader nextMap = new StreamReader(Path.Combine(
         Constants.MAIN_PATH, "Assets", "Levels", "level2.txt"));
     public StreamReader currentMap = new StreamReader(Path.Combine(
@@ -75,6 +73,35 @@ public class LevelLoader {
         return legend;
     }
 
+    private Dictionary<string, string> MetaMaker(List<string> lst) {
+        Dictionary<string, string> meta = new Dictionary<string, string>{};
+
+        int j = 0;
+        for (int i = 1; i < lst.Count; i++) {
+            if (lst[j] == "Meta:") {
+                while (lst[i] != "Meta/") {
+                    string key = "";
+                    int k = 0;
+                        while (lst[i][k] != ":".ToCharArray()[0]){
+                            key = key + lst[i][k].ToString();
+                            k++;
+                    }
+                    if (!(meta.ContainsKey(key))) {    
+                        meta.Add(key, lst[i].Substring(key.Length+2));
+                    } else if (meta.ContainsKey(key)) {
+                        break;
+                    }
+                    if (i < lst.Count - 1) {
+                        i++;
+                        j++;
+                    }
+                }
+            }
+            j++;
+        }
+        return meta;
+    }
+
     private Dictionary<string, Block> BlockDic(int j, int i) {
 
         DynamicShape blockShape = new DynamicShape(new Vec2F(((1f/12f)*(float)i), 
@@ -124,33 +151,41 @@ public class LevelLoader {
     }
 
     public EntityContainer<Block> LevelMaker() {
-        if (mapLevel == fileEntries.Length) {
-            GameEvent returnToMenu = new GameEvent();
-            returnToMenu.EventType = GameEventType.GameStateEvent;
-            returnToMenu.Message = "MAIN_MENU";
-            BreakoutBus.GetBus().RegisterEvent(returnToMenu);
-        }
-
-        StreamReader map = new StreamReader(fileEntries[mapLevel]);
-        EntityContainer<Block> blockMap = new EntityContainer<Block>();
-        List<string> lst = LevelListMaker(map);
-        List<string> level = LevelMapListMaker(lst);
-        Dictionary<char, string> legend = LegendMaker(lst);
-        for (int j = 0; j < level.Count; j++) {
-            for (int i = 0; i < level[j].Length; i++) { 
-                char sign = (level[j])[i];
-                if (sign.ToString() != "-") {
-                    try {
-                        Dictionary<string, Block> blocks = BlockDic(j, i);
-                        blockMap.AddEntity(blocks[legend[sign]]);
-                    }
-                    catch (Exception e) {
-                        Console.WriteLine(e.Message); 
-                    }
+    if (mapLevel == fileEntries.Length) {
+        GameEvent returnToMenu = new GameEvent();
+        returnToMenu.EventType = GameEventType.GameStateEvent;
+        returnToMenu.Message = "MAIN_MENU";
+        BreakoutBus.GetBus().RegisterEvent(returnToMenu);
+    }
+    StreamReader map = new StreamReader(fileEntries[mapLevel]);
+    EntityContainer<Block> blockMap = new EntityContainer<Block>();
+    List<string> lst = LevelListMaker(map);
+    List<string> level = LevelMapListMaker(lst);
+    Dictionary<char, string> legend = LegendMaker(lst);
+    for (int j = 0; j < level.Count; j++) {
+        for (int i = 0; i < level[j].Length; i++) { 
+            char sign = (level[j])[i];
+            if (sign.ToString() != "-") {
+                try {
+                    Dictionary<string, Block> blocks = BlockDic(j, i);
+                    blockMap.AddEntity(blocks[legend[sign]]);
+                }
+                catch (Exception e) {
+                    Console.WriteLine(e.Message); 
                 }
             }
         }
-        mapLevel++;
-        return blockMap;
+    }
+    foreach (var kvp in MetaMaker(lst)) {
+            Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
+        }
+
+    if (MetaMaker(lst).ContainsKey("Time")) {
+        Console.WriteLine("True");
+        timer = new Timer(Int32.Parse(MetaMaker(lst)["Time"]), 
+            new Vec2F(0.85f, 0.85f), new Vec2F(0.3f, 0.32f));
+    }
+    mapLevel++;
+    return blockMap;
     }
 }
