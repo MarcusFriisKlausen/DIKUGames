@@ -3,13 +3,17 @@ using DIKUArcade.Entities;
 using DIKUArcade.Graphics;
 using DIKUArcade.Math;
 using DIKUArcade.Input;
+using DIKUArcade.Timers;
 using DIKUArcade.Physics;
 using Breakout.BreakoutStates;
-
+using Breakout.Blocks;
 
 namespace Breakout;
 public class Ball : Entity, IGameEventProcessor {
-    private float MOVEMENT_SPEED = 0.01f;
+    private GameEvent doubleSizeBack;
+    private double? doubleSizeTimeStop;
+    private bool isDoubleSize = false;
+    private float MOVEMENT_SPEED = 0.015f;
     private GameEventBus eventBus;
     public Ball(DynamicShape shape, IBaseImage image) 
     : base(shape, image) {
@@ -18,6 +22,7 @@ public class Ball : Entity, IGameEventProcessor {
 
         eventBus = BreakoutBus.GetBus();
         eventBus.Subscribe(GameEventType.InputEvent, this);
+        eventBus.Subscribe(GameEventType.TimedEvent, this);
     }
     
     private float DirAngle() {
@@ -38,24 +43,11 @@ public class Ball : Entity, IGameEventProcessor {
         Shape.AsDynamicShape().Direction = new Vec2F(x, y);
     }
 
-    public EntityContainer<Entity> RemoveEntities(EntityContainer<Block> container){
-        var count = container.CountEntities();
-        EntityContainer<Entity> newCont = new EntityContainer<Entity>(count);
-        foreach (Entity ent in container) {
-            if (!ent.IsDeleted()) {
-                newCont.AddEntity(ent);
-            }
-        }
-        return newCont;
-    }
-
-    private void ChangeDir(EntityContainer<Block> cont, Player p) {
-        ChangeDirRightLeft(cont, p);
-        ChangeDirUpDown(cont, p);
+    private void ChangeDir(EntityContainer<Block> blockCont, Player p) {
+        ChangeDirRightLeft(blockCont, p);
+        ChangeDirUpDown(blockCont, p);
         HandlePaddleCollision(p);
         HandleWallCollision();
-
-        RemoveEntities(cont);
     }
 
     public void Move(EntityContainer<Block> cont, Player p) {
@@ -72,10 +64,14 @@ public class Ball : Entity, IGameEventProcessor {
             if (dataEnt.Collision){
                 if (dataEnt.CollisionDir == CollisionDirection.CollisionDirRight
                     || dataEnt.CollisionDir == CollisionDirection.CollisionDirLeft) {
-                        ent.LoseHealth();
-                        if (ent.Health == 0) {    
+                        if (ent.CanBeDestroyed) {
+                            ent.LoseHealth();
+                        }
+                        if (ent is InvisibleBlock) {
+                            ((InvisibleBlock)ent).Visiblize();
+                        }
+                        if (ent.Health == 0) {
                             GameRunning.GetInstance().Score.IncrementScore(ent.Value);
-                            ent.DeleteEntity();
                         }
                         Shape.AsDynamicShape().Direction = new Vec2F(
                             Shape.AsDynamicShape().Direction.X*(-1), 
@@ -93,14 +89,14 @@ public class Ball : Entity, IGameEventProcessor {
             if (dataEnt.Collision){
                 if (dataEnt.CollisionDir == CollisionDirection.CollisionDirUp
                     || dataEnt.CollisionDir == CollisionDirection.CollisionDirDown) {
-                        if (ent.CanBeDestroyed){
+                        if (ent.CanBeDestroyed) {
                             ent.LoseHealth();
-                            Console.WriteLine(ent.Health);
+                        }
+                        if (ent is InvisibleBlock) {
+                            ((InvisibleBlock)ent).Visiblize();
                         }
                         if (ent.Health == 0) {
                             GameRunning.GetInstance().Score.IncrementScore(ent.Value);
-                            ent.DeleteEntity();
-                            Console.WriteLine(DirAngle());
                         }
                         Shape.AsDynamicShape().Direction = new Vec2F(
                             Shape.AsDynamicShape().Direction.X, 
@@ -210,12 +206,47 @@ public class Ball : Entity, IGameEventProcessor {
         }
     }
 
+    public void DoubleSize() {
+        GameEvent doubleSize = new GameEvent();
+            doubleSize.EventType = GameEventType.TimedEvent;
+            doubleSize.Message = "doubleSize";
+            BreakoutBus.GetBus().RegisterEvent(doubleSize);
+        ProcessEvent(doubleSize);
+
+        doubleSizeBack = new GameEvent();
+            doubleSizeBack.EventType = GameEventType.TimedEvent;
+            doubleSizeBack.Message = "doubleSizeBack";
+            BreakoutBus.GetBus().RegisterEvent(doubleSizeBack);
+        doubleSizeTimeStop = StaticTimer.GetElapsedSeconds() + 10;
+    }
+
     public void ProcessEvent(GameEvent gameEvent) {
         if (gameEvent.Message == KeyboardKey.Space.ToString()) {
             if (Shape.AsDynamicShape().Direction.X == 0f 
                 && Shape.AsDynamicShape().Direction.Y == 0f) {
+                    StaticTimer.ResumeTimer();
                     SetDirection(MOVEMENT_SPEED * 0.1f, MOVEMENT_SPEED * 1f);
-            }  
+            }
+        }
+        else if (gameEvent.Message == "doubleSize") {
+            if (!isDoubleSize) {
+                this.Shape.Extent = new Vec2F(this.Shape.Extent.X*2, this.Shape.Extent.Y*2);
+            } 
+            isDoubleSize = true;
+        }
+        else if (gameEvent.Message == "doubleSizeBack") {
+            this.Shape.Extent = new Vec2F(this.Shape.Extent.X*0.5f, this.Shape.Extent.Y*0.5f);
+            isDoubleSize = false;
+        }
+    }
+
+    public void ProcessTimedEvents() {
+        if (doubleSizeTimeStop is not null) {
+            if ((int)doubleSizeTimeStop == (int)StaticTimer.GetElapsedSeconds()) {
+                if (isDoubleSize) {
+                    ProcessEvent(doubleSizeBack);
+                }
+            }
         }
     }
 }

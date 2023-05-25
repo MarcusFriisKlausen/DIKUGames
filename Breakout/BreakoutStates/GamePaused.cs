@@ -8,6 +8,7 @@ using DIKUArcade.Math;
 using System;
 using DIKUArcade.Events;
 using DIKUArcade.GUI;
+using DIKUArcade.Timers;
 
 namespace Breakout.BreakoutStates;
 
@@ -74,6 +75,7 @@ public class GamePaused : IGameState {
                 GameEvent returnToGame = new GameEvent();
                 returnToGame.EventType = GameEventType.GameStateEvent;
                 returnToGame.Message = "GAME_RUNNING";
+                StaticTimer.ResumeTimer();
                 BreakoutBus.GetBus().RegisterEvent(returnToGame);
                 }
             if (menuButtons[activeMenuButton].Equals(menuButtons[2])) {

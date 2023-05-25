@@ -29,14 +29,15 @@ Map/
 Meta:
 Name: LEVEL 3
 Time: 180
-PowerUp: #
-Unbreakable: Y
+PowerUp: 0
+Unbreakable: #
+Invisible: Y
 Meta/
 
 Legend:
 0) orange-block.png
 w) darkgreen-block.png
-#) unbreakable-grey-block.png
-Y) hardened-brown-block.png
+#) grey-block.png
+Y) brown-block.png
 b) yellow-block.png
 Legend/

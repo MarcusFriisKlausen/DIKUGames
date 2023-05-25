@@ -4,8 +4,6 @@ using DIKUArcade.Events;
 namespace Breakout.BreakoutStates;
 public class StateMachine : IGameEventProcessor {
     public IGameState ActiveState { get; private set; }
-    private GameRunning gameRunning = new GameRunning();
-    private MainMenu mainMenu = new MainMenu();
     public StateMachine() {
         BreakoutBus.GetBus().Subscribe(GameEventType.GameStateEvent, this);
         BreakoutBus.GetBus().Subscribe(GameEventType.InputEvent, this);

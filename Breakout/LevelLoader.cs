@@ -2,16 +2,16 @@ using DIKUArcade.Entities;
 using DIKUArcade.Math;
 using DIKUArcade.Graphics;
 using DIKUArcade.Events;
+using DIKUArcade.Timers;
+using Breakout.BreakoutStates;
+
+using Breakout.Blocks;
 
 namespace Breakout;
 public class LevelLoader {
     private string[] fileEntries = Directory.GetFiles(Path.Combine("Assets", "Levels"));
     private int mapLevel = 0;
-    public Timer? timer;
-    public StreamReader nextMap = new StreamReader(Path.Combine(
-        Constants.MAIN_PATH, "Assets", "Levels", "level2.txt"));
-    public StreamReader currentMap = new StreamReader(Path.Combine(
-        Constants.MAIN_PATH, "Assets", "Levels", "level1.txt"));
+    public Timer timer = new Timer(new Vec2F(0.0f, -0.1f), new Vec2F(0.3f, 0.32f));
     private List<string> LevelListMaker(StreamReader map) {
         List<string> lineList = new List<string>();
         try {
@@ -108,84 +108,103 @@ public class LevelLoader {
             (1f - (float)j/25f)), new Vec2F(1f/12f, 1f/25f)); 
         Dictionary<string, Block> blocks = new Dictionary<string, Block>{
             {"blue-block.png", 
-            new Block(blockShape, new Image(Path.Combine("Assets", "Images", "blue-block.png")), 
+            new NormalBlock(blockShape, new Image
+                (Path.Combine("Assets", "Images", "blue-block.png")), 
                 new Image(Path.Combine("Assets", "Images", "blue-block-damaged.png")))},
             {"brown-block.png", 
-            new Block(blockShape, new Image(Path.Combine("Assets", "Images", "brown-block.png")), 
+            new NormalBlock(blockShape, new Image
+                (Path.Combine("Assets", "Images", "brown-block.png")), 
                 new Image(Path.Combine("Assets", "Images", "brown-block-damaged.png")))},
             {"darkgreen-block.png", 
-            new Block(blockShape, 
+            new NormalBlock(blockShape, 
                 new Image(Path.Combine("Assets", "Images", "darkgreen-block.png")), 
                 new Image(Path.Combine("Assets", "Images", "darkgreen-block-damaged.png")))},
             {"green-block.png", 
-            new Block(blockShape, new Image(Path.Combine("Assets", "Images", "green-block.png")), 
+            new NormalBlock(blockShape, new Image
+                (Path.Combine("Assets", "Images", "green-block.png")), 
                 new Image(Path.Combine("Assets", "Images", "green-block-damaged.png")))},
             {"grey-block.png", 
-            new Block(blockShape, new Image(Path.Combine("Assets", "Images", "grey-block.png")), 
+            new NormalBlock(blockShape, new Image
+                (Path.Combine("Assets", "Images", "grey-block.png")), 
                 new Image(Path.Combine("Assets", "Images", "grey-block-damaged.png")))},
             {"orange-block.png", 
-            new Block(blockShape, new Image(Path.Combine("Assets", "Images", "orange-block.png")), 
+            new NormalBlock(blockShape, new Image
+                (Path.Combine("Assets", "Images", "orange-block.png")), 
                 new Image(Path.Combine("Assets", "Images", "orange-block-damaged.png")))},
             {"purple-block.png", 
-            new Block(blockShape, new Image(Path.Combine("Assets", "Images", "purple-block.png")), 
+            new NormalBlock(blockShape, new Image
+                (Path.Combine("Assets", "Images", "purple-block.png")), 
                 new Image(Path.Combine("Assets", "Images", "purple-block-damaged.png")))},
             {"red-block.png", 
-            new Block(blockShape, new Image(Path.Combine("Assets", "Images", "red-block.png")), 
+            new NormalBlock(blockShape, new Image
+                (Path.Combine("Assets", "Images", "red-block.png")), 
                 new Image(Path.Combine("Assets", "Images", "red-block-damaged.png")))},
             {"teal-block.png", 
-            new Block(blockShape, new Image(Path.Combine("Assets", "Images", "teal-block.png")), 
+            new NormalBlock(blockShape, new Image
+                (Path.Combine("Assets", "Images", "teal-block.png")), 
                 new Image(Path.Combine("Assets", "Images", "teal-block-damaged.png")))},
             {"yellow-block.png", 
-            new Block(blockShape, new Image(Path.Combine("Assets", "Images", "yellow-block.png")), 
-                new Image(Path.Combine("Assets", "Images", "yellow-block-damaged.png")))},
-            {"unbreakable-grey-block.png", 
-            new BlockUnbreakable(blockShape, 
-                new Image(Path.Combine("Assets", "Images", "grey-block.png")), 
-                new Image(Path.Combine("Assets", "Images", "grey-block-damaged.png")))},
-            {"hardened-brown-block.png", 
-            new BlockHardened(blockShape, 
-                new Image(Path.Combine("Assets", "Images", "brown-block.png")), 
-                new Image(Path.Combine("Assets", "Images", "brown-block-damaged.png")))}
+            new NormalBlock(blockShape, new Image
+                (Path.Combine("Assets", "Images", "yellow-block.png")), 
+                new Image(Path.Combine("Assets", "Images", "yellow-block-damaged.png")))}
         };
         return blocks;
     }
 
     public EntityContainer<Block> LevelMaker() {
-    if (mapLevel == fileEntries.Length) {
-        GameEvent returnToMenu = new GameEvent();
-        returnToMenu.EventType = GameEventType.GameStateEvent;
-        returnToMenu.Message = "MAIN_MENU";
-        BreakoutBus.GetBus().RegisterEvent(returnToMenu);
-    }
-    StreamReader map = new StreamReader(fileEntries[mapLevel]);
-    EntityContainer<Block> blockMap = new EntityContainer<Block>();
-    List<string> lst = LevelListMaker(map);
-    List<string> level = LevelMapListMaker(lst);
-    Dictionary<char, string> legend = LegendMaker(lst);
-    for (int j = 0; j < level.Count; j++) {
-        for (int i = 0; i < level[j].Length; i++) { 
-            char sign = (level[j])[i];
-            if (sign.ToString() != "-") {
-                try {
-                    Dictionary<string, Block> blocks = BlockDic(j, i);
-                    blockMap.AddEntity(blocks[legend[sign]]);
-                }
-                catch (Exception e) {
-                    Console.WriteLine(e.Message); 
+        if (mapLevel == fileEntries.Length) {
+            GameEvent returnToMenu = new GameEvent();
+            returnToMenu.EventType = GameEventType.GameStateEvent;
+            returnToMenu.Message = "MAIN_MENU";
+            BreakoutBus.GetBus().RegisterEvent(returnToMenu);
+        }
+        StreamReader map = new StreamReader(fileEntries[mapLevel]);
+        EntityContainer<Block> blockMap = new EntityContainer<Block>();
+        List<string> lst = LevelListMaker(map);
+        List<string> level = LevelMapListMaker(lst);
+        Dictionary<char, string> legend = LegendMaker(lst);
+        for (int j = 0; j < level.Count; j++) {
+            for (int i = 0; i < level[j].Length; i++) { 
+                char sign = (level[j])[i];
+                if (sign.ToString() != "-") {
+                    try {
+                        Dictionary<string, Block> blocks = BlockDic(j, i);
+                        NormalBlock newBlock = (NormalBlock)blocks[legend[sign]];
+
+                        if (MetaMaker(lst).ContainsKey("Unbreakable") 
+                            || MetaMaker(lst).ContainsKey("Invisible")) {
+                                if (MetaMaker(lst).ContainsKey("Unbreakable") 
+                                    && MetaMaker(lst)["Unbreakable"] == sign.ToString()) {
+                                        UnbreakableBlock unbreakaBlock = newBlock.ToUnbreakable();
+                                        blockMap.AddEntity(unbreakaBlock);
+                                } else if (MetaMaker(lst).ContainsKey("Invisible") 
+                                    && MetaMaker(lst)["Invisible"] == sign.ToString()) {
+                                        InvisibleBlock invisiBlock = newBlock.ToInvisible();
+                                        blockMap.AddEntity(invisiBlock);
+                                } else if (MetaMaker(lst).ContainsKey("PowerUp") 
+                                    && MetaMaker(lst)["PowerUp"] == sign.ToString()) {
+                                        PowerUpBlock PUBlock = newBlock.ToPowerUp();
+                                        blockMap.AddEntity(PUBlock);
+                                } else {
+                                    blockMap.AddEntity(newBlock);
+                                }
+                        } 
+                    }
+                    catch (Exception e) {
+                        Console.WriteLine(e.Message); 
+                    }
                 }
             }
         }
-    }
-    foreach (var kvp in MetaMaker(lst)) {
-            Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
+
+        timer.TurnOffReset();
+
+        if (MetaMaker(lst).ContainsKey("Time")) {
+            timer.SetTime(Int32.Parse(MetaMaker(lst)["Time"]));
         }
 
-    if (MetaMaker(lst).ContainsKey("Time")) {
-        Console.WriteLine("True");
-        timer = new Timer(Int32.Parse(MetaMaker(lst)["Time"]), 
-            new Vec2F(0.85f, 0.85f), new Vec2F(0.3f, 0.32f));
-    }
-    mapLevel++;
-    return blockMap;
+
+        mapLevel++;
+        return blockMap;
     }
 }

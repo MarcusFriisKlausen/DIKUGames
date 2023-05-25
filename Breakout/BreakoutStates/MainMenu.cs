@@ -2,12 +2,10 @@ using DIKUArcade.State;
 using DIKUArcade.Entities;
 using DIKUArcade.Graphics;
 using DIKUArcade.Input;
-using System.Collections.Generic;
-using System.IO;
 using DIKUArcade.Math;
-using System;
 using DIKUArcade.Events;
-using DIKUArcade.GUI;
+using DIKUArcade.Timers;
+
 
 namespace Breakout.BreakoutStates;
 
@@ -21,8 +19,13 @@ public class MainMenu : IGameState {
         if (MainMenu.instance == null) {
             MainMenu.instance = new MainMenu();
             MainMenu.instance.ResetState();
+            StaticTimer.RestartTimer();
+            StaticTimer.PauseTimer();
+            return MainMenu.instance;
+        } else {
+            StaticTimer.RestartTimer();
+            return MainMenu.instance;
         }
-        return MainMenu.instance;
     }
 
     public MainMenu() {
