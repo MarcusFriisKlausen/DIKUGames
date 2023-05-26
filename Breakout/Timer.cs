@@ -8,6 +8,7 @@ namespace Breakout;
 public class Timer {
     private int timeSeconds;
     private int maxTimeSeconds;
+    public int MaxTimeSeconds{get {return maxTimeSeconds;}}
     public int TimeSeconds { get { return timeSeconds; } }
     private int reducedTime;
     private int moreTime;

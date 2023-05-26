@@ -8,46 +8,94 @@ using DIKUArcade.Events;
 using DIKUArcade.Input;
 using DIKUArcade.Utilities;
 using System.Collections.Generic;
+using Breakout.Blocks;
+using Breakout.Effects;
+using Breakout.PowerUps;
 
 
 namespace TestBlocks;
-    [TestFixture]
-    public class Tests {
-        BlockHardened hardened;
-        Block block;
-        BlockUnbreakable unbreakable;
-        [SetUp]
-        public void Setup(){
-            DIKUArcade.GUI.Window.CreateOpenGLContext();
-            DynamicShape blockShape = new DynamicShape(new Vec2F(((1f/12f)), 
-            (0.1f)), new Vec2F(1f/12f, 1f/25f)); 
-            hardened = new BlockHardened(blockShape, new Image(Path.Combine("Assets", "Images", "brown-block.png")), 
-                new Image(Path.Combine("Assets", "Images", "brown-block-damaged.png")));
-            unbreakable = new BlockUnbreakable(blockShape, new Image(Path.Combine("Assets", "Images", "brown-block.png")), 
-                new Image(Path.Combine("Assets", "Images", "brown-block-damaged.png")));
-            block = new BlockHardened(blockShape, new Image(Path.Combine("Assets", "Images", "brown-block.png")), 
-                new Image(Path.Combine("Assets", "Images", "brown-block-damaged.png")));
-        }
+[TestFixture]
+public class Tests {
+    NormalBlock normalBlock;
+    InvisibleBlock invisBlock;
+    UnbreakableBlock unbreakableBlock;
+    PowerUpBlock powerUpBlock;
 
-        [Test]
-        public void TestLosingHealthBlock(){
-            block.LoseHealth();
-            int expectedHP = block.MaxHealth - 1;
-            Assert.AreEqual(block.Health, expectedHP);
-        }
-
-        [Test]
-        public void TestLosingHealthHardened(){
-            System.Console.WriteLine(hardened.health);
-            hardened.LoseHealth();
-            int expectedHP = 1;
-            Assert.AreEqual(hardened.Health, expectedHP);
-        }
-
-        [Test]
-        public void TestLosingHealthUnbreakable(){
-            unbreakable.LoseHealth();
-            int expectedHP = unbreakable.MaxHealth;
-            Assert.AreEqual(unbreakable.Health, unbreakable.MaxHealth);
-        }
+    [SetUp]
+    public void SetUp(){
+        var shape = new DynamicShape(new Vec2F((1f/12f), 1f), new Vec2F(1f/12f, 1f/25f));
+        var image = new Image(Path.Combine("Assets", "Images", "darkgreen-block.png"));
+        var brokenImage = new Image(Path.Combine("Assets", "Images", "darkgreen-block-damaged.png"));
+        normalBlock = new NormalBlock(shape, image, brokenImage);
+        invisBlock = new InvisibleBlock(shape, image, brokenImage);
+        unbreakableBlock = new UnbreakableBlock(shape, image, brokenImage);
+        powerUpBlock = new PowerUpBlock(shape, image, brokenImage);
     }
+
+    
+    [Test]
+    public void TestLoseHealthTrueNormal() {
+        int expected = 0; // health: 1 - 1 = 0
+        normalBlock.LoseHealth();
+        int actual = normalBlock.Health;
+        Assert.AreEqual(actual, expected);
+    }
+
+    [Test]
+    public void TestLoseHealthTruePowerUp() {
+        int expected = 0; // health: 1 - 1 = 0
+        powerUpBlock.LoseHealth();
+        int actual = powerUpBlock.Health;
+        Assert.AreEqual(actual, expected);
+    }
+
+    
+    [Test]
+    public void TestLoseHealthTrueUnbreakable() {
+        int expected = 1; // health: 1 - 1 = 0
+        unbreakableBlock.LoseHealth();
+        int actual = unbreakableBlock.Health;
+        Assert.AreEqual(actual, expected);
+    }
+
+    [Test]
+    public void TestLoseHealthTrueInvisible() {
+        int expected = 1; // health: 1 - 1 = 0
+        invisBlock.LoseHealth();
+        int actual = invisBlock.Health;
+        Assert.AreEqual(actual, expected);
+    }
+
+    [Test]
+    public void TestToPowerUp(){
+        var exp = powerUpBlock.GetType();
+        var convertedBlock = normalBlock.ToPowerUp();
+        var res = convertedBlock.GetType();
+        Assert.That(res, Is.EqualTo(exp));
+    }
+
+    [Test]
+    public void TestToInvisible(){
+        var exp = invisBlock.GetType();
+        var convertedBlock = normalBlock.ToInvisible();
+        var res = convertedBlock.GetType();
+        Assert.That(res, Is.EqualTo(exp));
+    }
+
+    [Test]
+    public void TestToUnbreakable(){
+        var exp = unbreakableBlock.GetType();
+        var convertedBlock = normalBlock.ToUnbreakable();
+        var res = convertedBlock.GetType();
+        Assert.That(res, Is.EqualTo(exp));
+    }
+
+    [Test]
+    public void TestVisiblize(){
+        var exp = true;
+        invisBlock.Visiblize();
+        var resVis = invisBlock.Visible;
+        var resDest = invisBlock.CanBeDestroyed;
+        Assert.That(resVis & resDest, Is.EqualTo(exp));
+    }
+}

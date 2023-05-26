@@ -12,7 +12,7 @@ public class StateMachine : IGameEventProcessor {
         GamePaused.GetInstance();
         GameLost.GetInstance();
     }
-    private void SwitchState(GameStateType stateType) {
+    public void SwitchState(GameStateType stateType) {
         switch (stateType) {
             case GameStateType.GameRunning:
                 ActiveState = GameRunning.GetInstance();

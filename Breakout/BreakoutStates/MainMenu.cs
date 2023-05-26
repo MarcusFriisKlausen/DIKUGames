@@ -14,6 +14,7 @@ public class MainMenu : IGameState {
     private Text[] menuButtons;
     private Entity backGroundImage;
     private int activeMenuButton = 0;
+    public int ActiveMenuButton{get{return activeMenuButton;}}
     private int maxMenuButtons;
     public static MainMenu GetInstance() {
         if (MainMenu.instance == null) {
