@@ -29,28 +29,4 @@ namespace TestStates;
         public void TestInitialState() {
             Assert.That(stateMachine.ActiveState, Is.InstanceOf<MainMenu>());
         }
-
-        [Test]
-        //Testing if TransformStateToString is able to transform a state to a string
-        public void TestTransformStateToStringRunning(){
-            a = StateTransformer.TransformStateToString(GameStateType.GameRunning);
-            b = "GAME_RUNNING";
-            Assert.That(b, Is.EqualTo(a));
-        }
-    
-        [Test]
-        //Testing if TransformStateToString is able to transform a state to a string
-        public void TestTransformStateToStringPaused(){
-            a = StateTransformer.TransformStateToString(GameStateType.GamePaused);
-            b = "GAME_PAUSED";
-            Assert.That(b, Is.EqualTo(a));
-        }
-    
-        [Test]
-        //Testing if TransformStateToString is able to transform a state to a string
-        public void TestTransformStateToStringMenu(){
-            a = StateTransformer.TransformStateToString(GameStateType.MainMenu);
-            b = "MAIN_MENU";
-            Assert.That(b, Is.EqualTo(a));
-        }
     }

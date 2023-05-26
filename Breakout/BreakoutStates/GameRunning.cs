@@ -195,6 +195,24 @@ public class GameRunning : IGameState {
         });
     }
 
+    private bool AllBlocksUnbreakable() {
+        bool b = true;
+        blocks.Iterate(block => {
+            if (block is not UnbreakableBlock) {
+                b = false;
+            }
+        });
+        return b;
+    }
+
+    private void NextLevel() {
+        if ((blocks.CountEntities() == 0)) {
+            blocks = levelLoader.LevelMaker();
+        } else if (AllBlocksUnbreakable()) {
+            blocks = levelLoader.LevelMaker();
+        }
+    }
+
     public void RenderBalls() {
         ballCont.Iterate(b => {
             b.RenderEntity();
@@ -224,7 +242,6 @@ public class GameRunning : IGameState {
     }
 
     public void UpdateState() {
-        Console.WriteLine(ballCont.CountEntities());
         eventBus.ProcessEventsSequentially();
         player.ProcessTimedEvents();
         ProcessBallTimedEvents();
@@ -232,9 +249,7 @@ public class GameRunning : IGameState {
         player.Move();
         MoveBalls();
         MoveEffects();
-        if ((blocks.CountEntities() == 0)) {
-            blocks = levelLoader.LevelMaker();
-        }
+        NextLevel();
         Score.PointsUpdate();
         HealthUpdate();
         levelLoader.timer.TimeUpdate();
