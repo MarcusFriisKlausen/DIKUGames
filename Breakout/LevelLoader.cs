@@ -105,7 +105,7 @@ public class LevelLoader {
     private Dictionary<string, Block> BlockDic(int j, int i) {
 
         DynamicShape blockShape = new DynamicShape(new Vec2F(((1f/12f)*(float)i), 
-            (1f - (float)j/25f)), new Vec2F(1f/12f, 1f/25f)); 
+            ((1f - 2f/25f) - (float)j/25f)), new Vec2F(1f/12f, 1f/25f)); 
         Dictionary<string, Block> blocks = new Dictionary<string, Block>{
             {"blue-block.png", 
             new NormalBlock(blockShape, new Image
