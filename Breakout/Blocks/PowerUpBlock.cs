@@ -13,18 +13,18 @@ public class PowerUpBlock : Block {
         base(shape, image, brokenImage) {
             this.brokenImage = brokenImage;
             this.powerUpsLst = new List<BlockEffect>{
-                // (new ExtraLife(new DynamicShape
-                //     (new Vec2F(0f, 0f), new Vec2F(0.03f, 0.03f)), 
-                //     new Image(Path.Combine("Assets", "Images", "LifePickup.png")))),
-                // (new Wide(new DynamicShape
-                //     (new Vec2F(0f, 0f), new Vec2F(0.03f, 0.03f)), 
-                //     new Image(Path.Combine("Assets", "Images", "WidePowerUp.png")))),
-                // (new MoreTime(new DynamicShape
-                //     (new Vec2F(0f, 0f), new Vec2F(0.03f, 0.03f)), 
-                //     new Image(Path.Combine("Assets", "Images", "clock-up.png")))),
-                // (new Invincible(new DynamicShape
-                //     (new Vec2F(0f, 0f), new Vec2F(0.03f, 0.03f)), 
-                //     new Image(Path.Combine("Assets", "Images", "ToughenUp.png")))),
+                (new ExtraLife(new DynamicShape
+                    (new Vec2F(0f, 0f), new Vec2F(0.03f, 0.03f)), 
+                    new Image(Path.Combine("Assets", "Images", "LifePickup.png")))),
+                (new Wide(new DynamicShape
+                    (new Vec2F(0f, 0f), new Vec2F(0.03f, 0.03f)), 
+                    new Image(Path.Combine("Assets", "Images", "WidePowerUp.png")))),
+                (new MoreTime(new DynamicShape
+                    (new Vec2F(0f, 0f), new Vec2F(0.03f, 0.03f)), 
+                    new Image(Path.Combine("Assets", "Images", "clock-up.png")))),
+                (new Invincible(new DynamicShape
+                    (new Vec2F(0f, 0f), new Vec2F(0.03f, 0.03f)), 
+                    new Image(Path.Combine("Assets", "Images", "ToughenUp.png")))),
                 (new DoubleSize(new DynamicShape
                     (new Vec2F(0f, 0f), new Vec2F(0.03f, 0.03f)), 
                     new Image(Path.Combine("Assets", "Images", "BigPowerUp.png"))))
