@@ -6,12 +6,27 @@ using DIKUArcade.Timers;
 using Breakout.BreakoutStates;
 
 using Breakout.Blocks;
+using Breakout.Blocks.Factory;
 
 namespace Breakout;
 public class LevelLoader {
     private string[] fileEntries = Directory.GetFiles(Path.Combine("Assets", "Levels"));
-    private int mapLevel = 0;
-    public Timer timer = new Timer(new Vec2F(0.0f, -0.1f), new Vec2F(0.3f, 0.32f));
+    private int mapLevel;
+    public Timer timer;
+    private NormalBlockFactory normalBlockFactory;
+    private InvisibleBlockFactory invisibleBlockFactory;
+    private UnbreakableBlockFactory unbreakableBlockFactory;
+    private PowerUpBlockFactory powerUpBlockFactory;
+
+    public LevelLoader() {
+        mapLevel = 0;
+        timer = new Timer(new Vec2F(0.0f, -0.1f), new Vec2F(0.3f, 0.32f));
+        normalBlockFactory = new NormalBlockFactory();
+        invisibleBlockFactory = new InvisibleBlockFactory();
+        unbreakableBlockFactory = new UnbreakableBlockFactory();
+        powerUpBlockFactory = new PowerUpBlockFactory();
+    }
+
     private List<string> LevelListMaker(StreamReader map) {
         List<string> lineList = new List<string>();
         try {
@@ -108,43 +123,43 @@ public class LevelLoader {
             ((1f - 2f/25f) - (float)j/25f)), new Vec2F(1f/12f, 1f/25f)); 
         Dictionary<string, Block> blocks = new Dictionary<string, Block>{
             {"blue-block.png", 
-            new NormalBlock(blockShape, new Image
+            normalBlockFactory.CreateBlock(blockShape, new Image
                 (Path.Combine("Assets", "Images", "blue-block.png")), 
                 new Image(Path.Combine("Assets", "Images", "blue-block-damaged.png")))},
             {"brown-block.png", 
-            new NormalBlock(blockShape, new Image
+            normalBlockFactory.CreateBlock(blockShape, new Image
                 (Path.Combine("Assets", "Images", "brown-block.png")), 
                 new Image(Path.Combine("Assets", "Images", "brown-block-damaged.png")))},
             {"darkgreen-block.png", 
-            new NormalBlock(blockShape, 
+            normalBlockFactory.CreateBlock(blockShape, 
                 new Image(Path.Combine("Assets", "Images", "darkgreen-block.png")), 
                 new Image(Path.Combine("Assets", "Images", "darkgreen-block-damaged.png")))},
             {"green-block.png", 
-            new NormalBlock(blockShape, new Image
+            normalBlockFactory.CreateBlock(blockShape, new Image
                 (Path.Combine("Assets", "Images", "green-block.png")), 
                 new Image(Path.Combine("Assets", "Images", "green-block-damaged.png")))},
             {"grey-block.png", 
-            new NormalBlock(blockShape, new Image
+            normalBlockFactory.CreateBlock(blockShape, new Image
                 (Path.Combine("Assets", "Images", "grey-block.png")), 
                 new Image(Path.Combine("Assets", "Images", "grey-block-damaged.png")))},
             {"orange-block.png", 
-            new NormalBlock(blockShape, new Image
+            normalBlockFactory.CreateBlock(blockShape, new Image
                 (Path.Combine("Assets", "Images", "orange-block.png")), 
                 new Image(Path.Combine("Assets", "Images", "orange-block-damaged.png")))},
             {"purple-block.png", 
-            new NormalBlock(blockShape, new Image
+            normalBlockFactory.CreateBlock(blockShape, new Image
                 (Path.Combine("Assets", "Images", "purple-block.png")), 
                 new Image(Path.Combine("Assets", "Images", "purple-block-damaged.png")))},
             {"red-block.png", 
-            new NormalBlock(blockShape, new Image
+            normalBlockFactory.CreateBlock(blockShape, new Image
                 (Path.Combine("Assets", "Images", "red-block.png")), 
                 new Image(Path.Combine("Assets", "Images", "red-block-damaged.png")))},
             {"teal-block.png", 
-            new NormalBlock(blockShape, new Image
+            normalBlockFactory.CreateBlock(blockShape, new Image
                 (Path.Combine("Assets", "Images", "teal-block.png")), 
                 new Image(Path.Combine("Assets", "Images", "teal-block-damaged.png")))},
             {"yellow-block.png", 
-            new NormalBlock(blockShape, new Image
+            normalBlockFactory.CreateBlock(blockShape, new Image
                 (Path.Combine("Assets", "Images", "yellow-block.png")), 
                 new Image(Path.Combine("Assets", "Images", "yellow-block-damaged.png")))}
         };
@@ -175,15 +190,18 @@ public class LevelLoader {
                             || MetaMaker(lst).ContainsKey("Invisible")) {
                                 if (MetaMaker(lst).ContainsKey("Unbreakable") 
                                     && MetaMaker(lst)["Unbreakable"] == sign.ToString()) {
-                                        UnbreakableBlock unbreakaBlock = newBlock.ToUnbreakable();
+                                        UnbreakableBlock unbreakaBlock = 
+                                            (UnbreakableBlock)unbreakableBlockFactory.CreateSpecialBlock(newBlock);
                                         blockMap.AddEntity(unbreakaBlock);
                                 } else if (MetaMaker(lst).ContainsKey("Invisible") 
                                     && MetaMaker(lst)["Invisible"] == sign.ToString()) {
-                                        InvisibleBlock invisiBlock = newBlock.ToInvisible();
+                                        InvisibleBlock invisiBlock = 
+                                            (InvisibleBlock)invisibleBlockFactory.CreateSpecialBlock(newBlock);
                                         blockMap.AddEntity(invisiBlock);
                                 } else if (MetaMaker(lst).ContainsKey("PowerUp") 
                                     && MetaMaker(lst)["PowerUp"] == sign.ToString()) {
-                                        PowerUpBlock PUBlock = newBlock.ToPowerUp();
+                                        PowerUpBlock PUBlock = 
+                                            (PowerUpBlock)powerUpBlockFactory.CreateSpecialBlock(newBlock);
                                         blockMap.AddEntity(PUBlock);
                                 } else {
                                     blockMap.AddEntity(newBlock);

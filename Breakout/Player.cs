@@ -137,8 +137,8 @@ public class Player : IGameEventProcessor {
             this.SetMoveLeft(false);
         }
         else if (gameEvent.Message == "reduceTime") {
-            GameRunning.GetInstance().levelLoader.timer.ReduceTime();
-        }
+             GameRunning.GetInstance().levelLoader.timer.ReduceTime();
+         }
         else if (gameEvent.Message == "moreTime") {
             GameRunning.GetInstance().levelLoader.timer.MoreTime();
         }

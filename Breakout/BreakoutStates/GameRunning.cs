@@ -208,9 +208,20 @@ public class GameRunning : IGameState {
     private void NextLevel() {
         if ((blocks.CountEntities() == 0)) {
             blocks = levelLoader.LevelMaker();
+            ballCont.ClearContainer();
+            ballCont.AddEntity(new Ball(new DynamicShape(new Vec2F(0.485f, 0.15f), 
+                new Vec2F(0.03f, 0.03f)), new Image(Path.Combine("Assets", "Images", "ball.png"))));
+            levelLoader.timer.ResetTimer();
+            effects.ClearContainer();
         } else if (AllBlocksUnbreakable()) {
             blocks = levelLoader.LevelMaker();
+            ballCont.ClearContainer();
+            ballCont.AddEntity(new Ball(new DynamicShape(new Vec2F(0.485f, 0.15f), 
+                new Vec2F(0.03f, 0.03f)), new Image(Path.Combine("Assets", "Images", "ball.png"))));
+            levelLoader.timer.ResetTimer();
+            effects.ClearContainer();
         }
+
     }
 
     public void RenderBalls() {

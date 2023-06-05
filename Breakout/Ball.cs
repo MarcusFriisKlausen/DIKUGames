@@ -107,79 +107,30 @@ public class Ball : Entity, IGameEventProcessor {
     }
 
     private void HandlePaddleCollision(Player p) {
+        var data = CollisionDetection.Aabb(this.Shape.AsDynamicShape(), p.Shape);
+        
         var pShape = p.Shape;
 
-        var dataPLeftMore = CollisionDetection.Aabb(
-            Shape.AsDynamicShape(), new DynamicShape(new Vec2F(
-                pShape.Position.X, (pShape.Position.Y - pShape.Position.Y / 10f)), new Vec2F(
-                pShape.Extent.X / 4f, pShape.Extent.Y)));
+        if (data.Collision) {
+            double pMid = p.Shape.Position.X + (p.Shape.Extent.X / 2);
+            double ballMid = this.Shape.Position.X + (this.Shape.Extent.X / 2);
+            double midDiff = (pMid - ballMid) / (p.Shape.Extent.X / 2);
 
-        var dataPLeft = CollisionDetection.Aabb(
-            Shape.AsDynamicShape(), new DynamicShape(new Vec2F(
-                (pShape.Position.X + p.Shape.Extent.X / 4f), 
-                (pShape.Position.Y - pShape.Position.Y / 10f)), 
-                new Vec2F(pShape.Extent.X / 4f, pShape.Extent.Y)));
+            double ballXSpeed;
+            double ballYSpeed;
+            
+            ballXSpeed = this.Shape.AsDynamicShape().Direction.X;
+            ballYSpeed = this.Shape.AsDynamicShape().Direction.Y;
+            
+            double ballSpeed = Math.Sqrt(ballXSpeed*ballXSpeed + ballYSpeed*ballYSpeed);
 
-        var dataPRight = CollisionDetection.Aabb(
-            Shape.AsDynamicShape(), new DynamicShape(new Vec2F(
-                (pShape.Position.X + p.Shape.Extent.X / 2f), 
-                (pShape.Position.Y - pShape.Position.Y / 10f)), 
-                new Vec2F((pShape.Extent.X / 4f), pShape.Extent.Y)));
+            const double X_INFLUENCE = 0.75;
 
-        var dataPRightMore = CollisionDetection.Aabb(
-            Shape.AsDynamicShape(), new DynamicShape(new Vec2F(
-                (pShape.Position.X + (p.Shape.Extent.X / 4f) * 3), 
-                (pShape.Position.Y - pShape.Position.Y / 10f)), 
-                new Vec2F((pShape.Extent.X / 4f), pShape.Extent.Y)));
-
-                
-        if (dataPLeft.Collision) {
-            // Send bolden mod venstre
-            if (Shape.AsDynamicShape().Direction.X >= 0f) {
-                Shape.AsDynamicShape().Direction = 
-                    new Vec2F(Shape.AsDynamicShape().Direction.X*(-1), 
-                        Shape.AsDynamicShape().Direction.Y*(-1f));
-            } else {
-                Shape.AsDynamicShape().Direction = 
-                    new Vec2F(Shape.AsDynamicShape().Direction.X, 
-                        Shape.AsDynamicShape().Direction.Y*(-1f));
-            }
-            // Send bolden mod højre
-        } else if (dataPRight.Collision) { 
-            if (Shape.AsDynamicShape().Direction.X < 0f) {
-                Shape.AsDynamicShape().Direction = 
-                    new Vec2F(Shape.AsDynamicShape().Direction.X*(-1), 
-                        Shape.AsDynamicShape().Direction.Y*(-1f));
-            } else {
-                Shape.AsDynamicShape().Direction = 
-                    new Vec2F(Shape.AsDynamicShape().Direction.X, 
-                        Shape.AsDynamicShape().Direction.Y*(-1));
-            }
-        } else if (dataPRightMore.Collision) { 
-            if (Shape.AsDynamicShape().Direction.X < 0f) {
-                Shape.AsDynamicShape().Direction =
-                    CalcDir(10f);
-            } else {
-                if (DirAngle() <= 20f) {
-                    Shape.AsDynamicShape().Direction = 
-                        CalcDir((float)(Math.PI/2));
-                }
-                Shape.AsDynamicShape().Direction =   
-                    CalcDir((-10f));
-            }
-        } else if (dataPLeftMore.Collision) {
-            // Send bolden mod venstre
-            if (Shape.AsDynamicShape().Direction.X >= 0f) {
-                Shape.AsDynamicShape().Direction = 
-                    CalcDir(10f);
-            } else {
-                if (DirAngle() <= -20f) {
-                    Shape.AsDynamicShape().Direction =
-                        CalcDir((float)(Math.PI));
-                }
-                Shape.AsDynamicShape().Direction = 
-                    CalcDir((10f));
-            }
+            ballXSpeed = -(ballSpeed * midDiff * X_INFLUENCE);
+            this.Shape.AsDynamicShape().Direction.X = (float)ballXSpeed;
+            
+            ballYSpeed = Math.Sqrt(ballSpeed * ballSpeed - ballXSpeed * ballXSpeed);
+            this.Shape.AsDynamicShape().Direction.Y = (float)ballYSpeed;
         }
     }
 

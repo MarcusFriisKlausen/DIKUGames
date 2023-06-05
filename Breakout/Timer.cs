@@ -61,4 +61,7 @@ public class Timer {
             display.SetText("TIME: " + ((maxTimeSeconds - timeSeconds).ToString()));
         }
     }
+    public void ResetTimer() {
+        SetTime(maxTimeSeconds);
+    }
 }
