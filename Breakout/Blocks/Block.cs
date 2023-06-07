@@ -47,12 +47,18 @@ public abstract class Block : Entity{
             );
     }
 
+    /// <summary>
+    /// Converts a block to a broken block when its health is decreased by half
+    /// <summary>
     private void ToBrokenBlock(){
         if (health == maxHealth/2){
             this.Image = this.brokenImage;
         }
     }
 
+    /// <summary>
+    /// Drops a block effect at random
+    /// <summary>
     public virtual void DropEffect() {
         drops.SetRandomInt();
         if (drops.rand == 4) {
@@ -60,6 +66,9 @@ public abstract class Block : Entity{
         }          
     }
 
+    /// <summary>
+    /// Decrases health when a lock is hit, drops an effect if health reaches zero
+    /// <summary>
     public virtual void LoseHealth() {
         if (CanBeDestroyed) {
             this.health = health - 1;

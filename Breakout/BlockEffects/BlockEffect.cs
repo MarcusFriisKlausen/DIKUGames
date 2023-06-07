@@ -9,10 +9,15 @@ public abstract class BlockEffect : Entity {
         this.Shape = shape;
         Shape.AsDynamicShape().Direction.Y = -MOVEMENT_SPEED;
     }
-
+    /// <summary>
+    /// Moves the hazard vertically down from its starting point
+    /// <summary>
     public void Move() {
         Shape.MoveY(Shape.AsDynamicShape().Direction.Y); 
     }
 
+    /// <summary>
+    /// Ties the effect to the player
+    /// <summary>
     public abstract void Effect(Player p);
 }

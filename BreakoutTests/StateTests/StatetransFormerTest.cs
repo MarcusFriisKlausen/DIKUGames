@@ -2,7 +2,8 @@ using NUnit.Framework;
 using Breakout.BreakoutStates;
 using Breakout;
 
-public class StateMachineTest{
+namespace TestStates;
+public class StateTransformerTest{
 
     [SetUp]
     public void SetUp(){

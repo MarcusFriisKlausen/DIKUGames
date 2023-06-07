@@ -15,7 +15,7 @@ using Breakout.PowerUps;
 
 namespace TestBlocks;
 [TestFixture]
-public class Tests {
+public class BlockTests {
     NormalBlock normalBlock;
     InvisibleBlock invisBlock;
     UnbreakableBlock unbreakableBlock;
@@ -38,7 +38,7 @@ public class Tests {
         int expected = 0; // health: 1 - 1 = 0
         normalBlock.LoseHealth();
         int actual = normalBlock.Health;
-        Assert.AreEqual(actual, expected);
+        Assert.That(actual, Is.EqualTo(expected));
     }
 
     [Test]
@@ -46,7 +46,7 @@ public class Tests {
         int expected = 0; // health: 1 - 1 = 0
         powerUpBlock.LoseHealth();
         int actual = powerUpBlock.Health;
-        Assert.AreEqual(actual, expected);
+        Assert.That(actual, Is.EqualTo(expected));
     }
 
     
@@ -55,7 +55,7 @@ public class Tests {
         int expected = 1; // health: 1 - 1 = 0
         unbreakableBlock.LoseHealth();
         int actual = unbreakableBlock.Health;
-        Assert.AreEqual(actual, expected);
+        Assert.That(actual, Is.EqualTo(expected));
     }
 
     [Test]
@@ -63,7 +63,7 @@ public class Tests {
         int expected = 1; // health: 1 - 1 = 0
         invisBlock.LoseHealth();
         int actual = invisBlock.Health;
-        Assert.AreEqual(actual, expected);
+        Assert.That(actual, Is.EqualTo(expected));
     }
 
     [Test]

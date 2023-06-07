@@ -21,23 +21,23 @@ public class TimerTest{
         int exp = t;
         timer.SetTime(t);
         int res = timer.MaxTimeSeconds;
-        Assert.AreEqual(exp, res);
+        Assert.That(exp, Is.EqualTo(res));
     }
 
-    //[Test]
-    //public void TestReducedTime(){
-    //    int exp = -10;
-    //    timer.ReduceTime();
-    //    int res = timer.ReducedTime;
-    //    Assert.AreEqual(res, exp);
-    //}
-//
-    //[Test]
-    //public void TestMoreTime(){
-    //    int exp = 10;
-    //    timer.MoreTime();
-    //    int res = timer.MoreTime;
-    //    Assert.AreEqual(res, exp);
-    //}
+    [Test]
+    public void TestReducedTime(){
+        int exp = 10;
+        timer.ReduceTime();
+        int res = timer.ReducedTime;
+        Assert.That(exp, Is.EqualTo(res));
+    }
+
+    [Test]
+    public void TestMoreTime(){
+        int exp = -10;
+        timer.MoreTime();
+        int res = timer.MoreTime_;
+        Assert.That(exp, Is.EqualTo(res));
+    }
 
 }

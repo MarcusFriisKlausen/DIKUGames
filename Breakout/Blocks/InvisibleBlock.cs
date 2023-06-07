@@ -20,12 +20,18 @@ public class InvisibleBlock : Block {
             this.Visible = false;
     }
 
+    /// <summary>
+    /// Makes the block visible by setting the bool to be true
+    /// <summary>
     public void Visiblize() {
         Image = blockImage;
         this.Visible = true;
         CanBeDestroyed = true;
     }
 
+    /// <summary>
+    /// Decreases health by one
+    /// <summary>
     public override void LoseHealth() {
         if (CanBeDestroyed) {
             this.health = health - 1;

@@ -10,8 +10,9 @@ using DIKUArcade.Input;
 
 namespace TestPlayer;
     [TestFixture]
-    public class Tests{
+    public class PlayerTests{
         Player player;
+        Breakout.Timer timer;
         
         [SetUp]
         public void Setup(){
@@ -19,6 +20,7 @@ namespace TestPlayer;
             
             player = new Player(new DynamicShape(new Vec2F(0.45f, 0.1f), new Vec2F(0.1f, 0.1f)),
                 new Image(Path.Combine("Assets", "Images", "player.png")));
+            timer = new Breakout.Timer(new Vec2F(0.0f, -0.1f), new Vec2F(0.3f, 0.32f));
             
             BreakoutBus.GetBus().Subscribe(GameEventType.PlayerEvent, player);
         }
@@ -85,4 +87,38 @@ namespace TestPlayer;
             //Assert
             Assert.That(posX + player.GetMS(), Is.EqualTo(newPosX));
         }
+
+        [Test]
+        public void TestWiden(){
+            float expected = player.Shape.Extent.X * 2.0f;
+            player.Widen();
+            float result = player.Shape.Extent.X;
+            Assert.That(result, Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void TestMakeInvincible(){
+            bool expected = player.Health.Invincible;
+            player.MakeInvincible();
+            bool result = player.Health.Invincible;
+            Assert.That(result, Is.Not.EqualTo(expected));
+        }
+
+        // [Test]
+        // public void TestReduceTime(){
+        //     int expected = 10;
+        //     player.ReduceTime();
+        //     int result = timer.ReducedTime;
+        //     Assert.That(result, Is.EqualTo(expected));
+        // }
+// 
+        // [Test]
+        // public void TestMoreTime() {
+        //     int expected = 10;
+        //     player.MoreTime();
+        //     int result = timer.MoreTime_;
+        //     Assert.That(result, Is.EqualTo(expected));
+        // }
+
+
     }

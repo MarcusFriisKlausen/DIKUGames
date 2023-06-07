@@ -22,7 +22,7 @@ public class HealthTest {
         int exp = 2; // health = 3 - 1 = 2
         HP.LoseHealth();
         int res = HP.Value;
-        Assert.AreEqual(res, exp);
+        Assert.That(exp, Is.EqualTo(res));
     }
 
     [Test]
@@ -33,7 +33,7 @@ public class HealthTest {
         HP.GainHealth();
         HP.GainHealth();
         int res = HP.Value;
-        Assert.AreEqual(res, exp);
+        Assert.That(exp, Is.EqualTo(res));
     }
     
 }

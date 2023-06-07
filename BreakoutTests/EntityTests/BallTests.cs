@@ -1,77 +1,94 @@
-// using NUnit.Framework;
-// using DIKUArcade.Math;
-// using Breakout.Blocks;
-// using DIKUArcade.Events;
-// using DIKUArcade.Entities;
-// using DIKUArcade.Graphics;
-// using DIKUArcade.Input;
-// using DIKUArcade.Physics;
-// using Breakout.BreakoutStates;
+using NUnit.Framework;
+using Breakout;
+using Breakout.BreakoutStates;
+using DIKUArcade.Math;
+using DIKUArcade.Entities;
+using DIKUArcade.Graphics;
+using DIKUArcade.Events;
+using DIKUArcade.Input;
+using DIKUArcade.Utilities;
+using System.Collections.Generic;
+using Breakout.Blocks;
+using Breakout.Effects;
+using Breakout.PowerUps;
 
-// namespace Breakout.Tests {
-//     [TestFixture]
-//     public class BallTests {
-//         Ball ball;
-//         NormalBlock block;
-//         Player player;
-//         [SetUp]
-//         public void SetUp(){
-//             DIKUArcade.GUI.Window.CreateOpenGLContext();
-//             var shape = new DynamicShape(new Vec2F((1f/12f), 1f), new Vec2F(1f/12f, 1f/25f));
-//             var image = new Image(Path.Combine("Assets", "Images", "darkgreen-block.png"));
-//             var brokenImage = new Image(Path.Combine("Assets", "Images", "darkgreen-block-damaged.png"));
-//             ball = new Ball(new DynamicShape(new Vec2F(0.5f, 0.5f), new Vec2F(0.1f, 0.1f)), null);
-//             block = new NormalBlock(shape, image, brokenImage);
-//             player = new Player(shape, image);
 
-//             BreakoutBus.GetBus().Subscribe(GameEventType.PlayerEvent, player);
+namespace TestBlocks;
+[TestFixture]
+public class BallTests {
+    NormalBlock normalBlock;
+    InvisibleBlock invisBlock;
+    UnbreakableBlock unbreakableBlock;
+    PowerUpBlock powerUpBlock;
+    EntityContainer<Block> blockCont;
 
-//         }
-        
-//         [Test]
-//         public void TestMove_DirectionChangesOnCollisionWithBlock() {
-//             // Act
-//             ball.Move()
 
-//             // Assert
-//             Assert.AreNotEqual(new Vec2F(0.01f, 0.01f), ball.Shape.AsDynamicShape().Direction);
-//         }
-        
-//         [Test]
-//         public void TestMove_DirectionChangesOnCollisionWithPlayer() {
-//             // Act
-//             ball.Move(new EntityContainer<Block>(), player);
+    Ball ball;
+    EntityContainer<Ball> ballCont;
 
-//             // Assert
-//             Assert.AreNotEqual(new Vec2F(0.01f, 0.01f), ball.Shape.AsDynamicShape().Direction);
-//         }
-        
-//         [Test]
-//         public void TestMove_DirectionDoesNotChangeWithoutCollision() {
-//             // Act
-//             ball.Move(new EntityContainer<Block>(), null);
+    Player player;
 
-//             // Assert
-//             Assert.AreEqual(new Vec2F(0.01f, 0.01f), ball.Shape.AsDynamicShape().Direction);
-//         }
-        
-//         [Test]
-//         public void TestLosingHealth_ReturnsOneWhenBallGoesOutOfBound() {
-//             ball.Shape.Position.Y = -0.1f;
-//             // Act
-//             int result = ball.LosingHealth();
+    [SetUp]
+    public void SetUp(){
+        DIKUArcade.GUI.Window.CreateOpenGLContext();
 
-//             // Assert
-//             Assert.AreEqual(1, result);
-//         }
-        
-//         [Test]
-//         public void TestLosingHealth_ReturnsZeroWhenBallIsWithinBound() {
-//             // Act
-//             int result = ball.LosingHealth();
+        var shape = new DynamicShape(new Vec2F((1f/12f), 1f), new Vec2F(1f/12f, 1f/25f));
+        var image = new Image(Path.Combine("Assets", "Images", "darkgreen-block.png"));
+        var brokenImage = new Image(Path.Combine("Assets", "Images", "darkgreen-block-damaged.png"));
+        normalBlock = new NormalBlock(shape, image, brokenImage);
+        blockCont = new EntityContainer<Block>();
+        blockCont.AddEntity(normalBlock);
 
-//             // Assert
-//             Assert.AreEqual(0, result);
-//         }
-//     }
-// }
+
+        ballCont = new EntityContainer<Ball>();
+        ball = new Ball(
+            new DynamicShape(new Vec2F(0.485f, 0.15f), new Vec2F(0.03f, 0.03f)),
+            new Image(Path.Combine("Assets", "Images", "ball.png")));
+        ballCont.AddEntity(ball);
+
+        player = new Player(
+            new DynamicShape(new Vec2F(0.45f, 0.1f), new Vec2F(0.1f, 0.1f)),
+            new Image(Path.Combine("Assets", "Images", "player.png")));
+        BreakoutBus.GetBus().Subscribe(GameEventType.PlayerEvent, player);
+    }
+
+    [TestCase(0.05f)]
+    [TestCase(0.5f)]
+    [TestCase(1.0f)]
+    public void TestLosingHealthFalse(float i){
+        ball.Shape.Position.Y = i;
+        int exp = 0; //LosingHealth should return 0 as i > 0.0.
+        int res = ball.LosingHealth();
+        Assert.That(res, Is.EqualTo(exp));
+    }
+
+    [TestCase(-0.01f)]
+    [TestCase(-0.5f)]
+    [TestCase(-1.0f)]
+    public void TestLosingHealthTrue(float i){
+        ball.Shape.Position.Y = i;
+        int exp = 1; //LosingHealth should return 1 as i < 0.0.
+        int res = ball.LosingHealth();
+        Assert.That(res, Is.EqualTo(exp));
+    }
+    
+
+    [Test]
+    public void TestMoveNoDir(){
+        Vec2F expected = ball.Shape.Position;
+        ball.Move(blockCont, player);
+        Vec2F result = ball.Shape.Position; 
+        Assert.That(result, Is.EqualTo(expected));
+    }
+
+    [Test]
+    public void TestDoubleSize(){
+        float expectedX = ball.Shape.Extent.X * 2.0f;
+        float expectedY = ball.Shape.Extent.Y * 2.0f;
+        ball.DoubleSize();
+        float resultX = ball.Shape.Extent.X;
+        float resultY = ball.Shape.Extent.Y;
+        Assert.That(resultX, Is.EqualTo(expectedX));
+        Assert.That(resultY, Is.EqualTo(expectedY));
+    }
+}

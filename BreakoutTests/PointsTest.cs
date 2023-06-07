@@ -16,6 +16,6 @@ public class PointsTest{
         int exp = 10; // 0 + 10 = 10 = score
         points.IncrementScore(10);
         int res = points.Count;
-        Assert.AreEqual(res, exp);
+        Assert.That(exp, Is.EqualTo(res));
     }
 }

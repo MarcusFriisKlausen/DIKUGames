@@ -30,25 +30,17 @@ public class Ball : Entity, IGameEventProcessor {
         eventBus.Subscribe(GameEventType.InputEvent, this);
         eventBus.Subscribe(GameEventType.TimedEvent, this);
     }
-    
-    private float DirAngle() {
-        return (float)(Math.Atan(Shape.AsDynamicShape().Direction.Y 
-        / Shape.AsDynamicShape().Direction.X)*(180/Math.PI));
-    }
 
-    private Vec2F CalcDir(float angle) {
-        return new Vec2F(
-            Shape.AsDynamicShape().Direction.X*(float)Math.Cos(((angle*(180/Math.PI))))
-            - Shape.AsDynamicShape().Direction.Y*(float)Math.Sin((angle*(180/Math.PI))), 
-            Shape.AsDynamicShape().Direction.X*(float)Math.Sin(((angle*(180/Math.PI))))
-            + Shape.AsDynamicShape().Direction.Y*(float)Math.Cos((angle*(180/Math.PI)))
-        );
-    }
-
+    /// <summary>
+    /// Sets the initial direction of the ball
+    /// <summary>
     private void SetDirection(float x, float y) {
         Shape.AsDynamicShape().Direction = new Vec2F(x, y);
     }
 
+    /// <summary>
+    /// Changes the balls direction left, right, up and down when collisions happen
+    /// <summary>
     private void ChangeDir(EntityContainer<Block> blockCont, Player p) {
         CollisionHandler.ChangeDirRightLeft(this.Shape.AsDynamicShape(), blockCont);
         CollisionHandler.ChangeDirUpDown(this.Shape.AsDynamicShape(), blockCont);
@@ -56,12 +48,18 @@ public class Ball : Entity, IGameEventProcessor {
         CollisionHandler.HandleWallCollision(this.Shape);
     }
 
+    /// <summary>
+    /// Moves the ball
+    /// <summary>
     public void Move(EntityContainer<Block> cont, Player p) {
         ChangeDir(cont, p);
         Shape.MoveX(Shape.AsDynamicShape().Direction.X);
         Shape.MoveY(Shape.AsDynamicShape().Direction.Y);
     }
 
+    /// <summary>
+    /// Makes the player lose health when a ball leaves the window
+    /// <summary>
     public int LosingHealth(){
         if (Shape.Position.Y < 0.0){
             Shape.AsDynamicShape().Direction.X = 0f;
@@ -73,6 +71,9 @@ public class Ball : Entity, IGameEventProcessor {
         }
     }
 
+    /// <summary>
+    /// Makes the size of the ball double
+    /// <summary>
     public void DoubleSize() {
         GameEvent doubleSize = new GameEvent();
             doubleSize.EventType = GameEventType.TimedEvent;
@@ -87,6 +88,9 @@ public class Ball : Entity, IGameEventProcessor {
         doubleSizeTimeStop = StaticTimer.GetElapsedSeconds() + 10;
     }
 
+    /// <summary>
+    /// Processes events related to the ball
+    /// <summary>
     public void ProcessEvent(GameEvent gameEvent) {
         if (gameEvent.Message == KeyboardKey.Space.ToString()) {
             if (Shape.AsDynamicShape().Direction.X == 0f 
@@ -107,6 +111,9 @@ public class Ball : Entity, IGameEventProcessor {
         }
     }
 
+    /// <summary>
+    /// Processes timed events related to the ball
+    /// <summary>
     public void ProcessTimedEvents() {
         if (doubleSizeTimeStop is not null) {
             if ((int)doubleSizeTimeStop == (int)StaticTimer.GetElapsedSeconds()) {
