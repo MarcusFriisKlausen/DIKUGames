@@ -3,12 +3,14 @@ using DIKUArcade.Math;
 using DIKUArcade.Graphics;
 using DIKUArcade.Events;
 using DIKUArcade.Timers;
-using Breakout.BreakoutStates;
-
 using Breakout.Blocks;
 using Breakout.Blocks.Factory;
 
 namespace Breakout;
+/// <summary>
+/// This class is responsible for loading the levels. It contains functions that reads and stores 
+/// data from the txt files and places the given blocks at the right position.
+/// </summary>
 public class LevelLoader {
     private string[] fileEntries = Directory.GetFiles(Path.Combine("Assets", "Levels"));
     private int mapLevel;
@@ -26,7 +28,11 @@ public class LevelLoader {
         unbreakableBlockFactory = new UnbreakableBlockFactory();
         powerUpBlockFactory = new PowerUpBlockFactory();
     }
-
+    /// <summary>
+    /// Method used to read the data from the txt files, and adding it to a list of strings.
+    /// </summary>
+    /// <param name="map">Reads characters from a byte stream in a particular encoding.</param>
+    /// <returns> Returns a list of strings containing the file data. </returns>
     private List<string> LevelListMaker(StreamReader map) {
         List<string> lineList = new List<string>();
         try {
@@ -48,6 +54,11 @@ public class LevelLoader {
         return lineList;
     }
 
+    /// <summary>
+    /// Method used to add only the map data to a list of strings.
+    /// </summary>
+    /// <param name="lst"> A list of strings.</param>
+    /// <returns> Returns a list of strings containing the map data. </returns>
     private List<string> LevelMapListMaker(List<string> lst) {
         List<string> lineList = new List<string>();
         
@@ -65,6 +76,11 @@ public class LevelLoader {
         return lineList;
     }
 
+    /// <summary>
+    /// Method used to add only the legend data to a dictionary of characters and strings.
+    /// </summary>
+    /// <param name="lst"> A list of strings.</param>
+    /// <returns>Returns a dictionary of characters and strings containing the legend data</returns>
     private Dictionary<char, string> LegendMaker(List<string> lst) {
         Dictionary<char, string> legend = new Dictionary<char, string>{};
         
@@ -88,6 +104,11 @@ public class LevelLoader {
         return legend;
     }
 
+    /// <summary>
+    /// Method used to add only the meta data to a dictionary of strings.
+    /// </summary>
+    /// <param name="lst"> A list of strings.</param>
+    /// <returns> Returns a dictionary of strings containing the meta data. </returns>
     private Dictionary<string, string> MetaMaker(List<string> lst) {
         Dictionary<string, string> meta = new Dictionary<string, string>{};
 
@@ -117,6 +138,12 @@ public class LevelLoader {
         return meta;
     }
 
+    /// <summary>
+    /// Method used to add blocks .
+    /// </summary>
+    /// <param name="j"> The rows of the txt file.</param>
+    /// <param name="i"> The columns of the txt file.</param>
+    /// <returns>Returns a dictionary of strings containing the . </returns>
     private Dictionary<string, Block> BlockDic(int j, int i) {
 
         DynamicShape blockShape = new DynamicShape(new Vec2F(((1f/12f)*(float)i), 
@@ -166,18 +193,27 @@ public class LevelLoader {
         return blocks;
     }
 
+    /// <summary>
+    /// Method used to .
+    /// </summary>
+    /// <returns>Returns a entity container containing blocks. </returns>
     public EntityContainer<Block> LevelMaker() {
         if (mapLevel == fileEntries.Length) {
             GameEvent returnToMenu = new GameEvent();
             returnToMenu.EventType = GameEventType.GameStateEvent;
             returnToMenu.Message = "MAIN_MENU";
             BreakoutBus.GetBus().RegisterEvent(returnToMenu);
+            EntityContainer<Block> done = new EntityContainer<Block>();
+            mapLevel = 0;
+            return done;
         }
         StreamReader map = new StreamReader(fileEntries[mapLevel]);
         EntityContainer<Block> blockMap = new EntityContainer<Block>();
         List<string> lst = LevelListMaker(map);
         List<string> level = LevelMapListMaker(lst);
+
         Dictionary<char, string> legend = LegendMaker(lst);
+
         for (int j = 0; j < level.Count; j++) {
             for (int i = 0; i < level[j].Length; i++) { 
                 char sign = (level[j])[i];
@@ -206,7 +242,9 @@ public class LevelLoader {
                                 } else {
                                     blockMap.AddEntity(newBlock);
                                 }
-                        } 
+                        } else {
+                            blockMap.AddEntity(newBlock);
+                        }
                     }
                     catch (Exception e) {
                         Console.WriteLine(e.Message); 
@@ -214,11 +252,14 @@ public class LevelLoader {
                 }
             }
         }
-
-        timer.TurnOffReset();
-
+        
         if (MetaMaker(lst).ContainsKey("Time")) {
+            StaticTimer.RestartTimer();
+            timer = new Timer(new Vec2F(0.0f, -0.1f), new Vec2F(0.3f, 0.32f));
             timer.SetTime(Int32.Parse(MetaMaker(lst)["Time"]));
+        } else {
+            timer.SetTime(1000000000);
+            timer.TurnOffReset();
         }
 
 
