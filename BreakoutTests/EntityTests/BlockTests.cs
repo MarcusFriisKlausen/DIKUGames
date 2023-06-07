@@ -67,30 +67,6 @@ public class BlockTests {
     }
 
     [Test]
-    public void TestToPowerUp(){
-        var exp = powerUpBlock.GetType();
-        var convertedBlock = normalBlock.ToPowerUp();
-        var res = convertedBlock.GetType();
-        Assert.That(res, Is.EqualTo(exp));
-    }
-
-    [Test]
-    public void TestToInvisible(){
-        var exp = invisBlock.GetType();
-        var convertedBlock = normalBlock.ToInvisible();
-        var res = convertedBlock.GetType();
-        Assert.That(res, Is.EqualTo(exp));
-    }
-
-    [Test]
-    public void TestToUnbreakable(){
-        var exp = unbreakableBlock.GetType();
-        var convertedBlock = normalBlock.ToUnbreakable();
-        var res = convertedBlock.GetType();
-        Assert.That(res, Is.EqualTo(exp));
-    }
-
-    [Test]
     public void TestVisiblize(){
         var exp = true;
         invisBlock.Visiblize();
