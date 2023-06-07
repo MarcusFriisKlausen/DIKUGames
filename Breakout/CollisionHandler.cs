@@ -11,8 +11,20 @@ namespace Breakout;
 /// </summary>
 public static class CollisionHandler {
     /// </summary>
-    /// 
+    /// The method for checking collison between ball and player. First checks whether or not
+    /// a collision has occured between the two shapes. If this is the case, the difference between
+    /// the player's midpoint and the ball's midpoint is found and devided by the player's extent
+    /// halved, which gives us a value for how far from the middle of the paddle, the ball has hit.
+    /// Then the speed of the ball is saved as a variable using the formula for the length of a 
+    /// vector. We then have a constant for how much our ball should change its directional angle
+    /// depending on where it hits on the paddle. The new x-speed is then calculated by taking the
+    /// negative of the product of the current ball speed, the value for how far from the middle of 
+    /// the paddle, the ball has hit and the constant influence.
+    /// The y-speed is calculated by taking the square root of the current ball speed squared minus
+    /// the new x-speed, ensuring that the overall speed of the ball stays the same.
     /// </summary>
+    /// <param name="ball"> The ball's DynamicShape for which we check for collision.</param>
+    /// <param name="player"> The player's Shape for which we check for collision.</param>
     public static void HandlePaddleCollision(DynamicShape ball, Shape player) {
         var data = CollisionDetection.Aabb(ball, player);
 

@@ -139,11 +139,13 @@ public class LevelLoader {
     }
 
     /// <summary>
-    /// Method used to add blocks .
+    /// Method used to create a dictionary of specific types of blocks with specific positions
+    /// and images for a specific ASCII-map.
     /// </summary>
     /// <param name="j"> The rows of the txt file.</param>
     /// <param name="i"> The columns of the txt file.</param>
-    /// <returns>Returns a dictionary of strings containing the . </returns>
+    /// <returns>Returns a dictionary of with string keys, being the string names of the image files
+    /// and Block values, being the specific block. </returns>
     private Dictionary<string, Block> BlockDic(int j, int i) {
 
         DynamicShape blockShape = new DynamicShape(new Vec2F(((1f/12f)*(float)i), 
@@ -194,7 +196,16 @@ public class LevelLoader {
     }
 
     /// <summary>
-    /// Method used to .
+    /// Method used to create an EntityContainer with Blocks being the full amount of Blocks in a 
+    /// level, generated from the current levels ASCII-map. Firstly the method checks if there are
+    /// more levels to load, if this is not the case, the game is over, and switches to main menu.
+    /// If there are more levels to load, it reads the current level-file and makes lists for 
+    /// the whole file and thereafter the map. Then the method creates the Legend-dictionary.
+    /// Hereafter the method runs a nested for-loop, which goes through the characters of each 
+    /// column in every row, and checks if there should be a block, and if yes which color and which
+    /// type using the metadata. These blocks are put into an EntityContainer. Lastly, the method
+    /// checks if there is a time in the metadata. If there is, a timer is created with the right
+    /// time, and the maplevel gets incremented.
     /// </summary>
     /// <returns>Returns a entity container containing blocks. </returns>
     public EntityContainer<Block> LevelMaker() {
