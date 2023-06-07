@@ -1,10 +1,11 @@
 using DIKUArcade.Entities;
 using DIKUArcade.Graphics;
-using Breakout.Hazards;
-using Breakout.Effects;
-using DIKUArcade.Math;
 
 namespace Breakout.Blocks;
+/// <summary>
+/// This class is responsible for creating a normal block. It also contains functions for 
+/// converting a normal block to a hazard block and a power up block.
+/// </summary>
 public class NormalBlock : Block {
     private IBaseImage? blockImage;
     private IBaseImage brokenImage;    

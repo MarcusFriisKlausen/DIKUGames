@@ -2,6 +2,9 @@ using DIKUArcade.Graphics;
 using DIKUArcade.Math;
 
 namespace Breakout;
+/// <summary>
+/// This class is responsible for rendering, updating and incrementing the score
+/// </summary>
 public class Points {
     private int count;
     public int Count { get { return count; } }

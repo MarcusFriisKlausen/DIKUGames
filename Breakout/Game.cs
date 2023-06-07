@@ -2,10 +2,12 @@ using DIKUArcade;
 using DIKUArcade.GUI;
 using DIKUArcade.Events;
 using DIKUArcade.Input;
-using System.Collections.Generic;
 
 using Breakout.BreakoutStates;
-
+/// <summary>
+/// This class is responsible for setting up the game, as it initializes and subscribes to the
+/// eventBus. It handles and processes events, as well as rendering and updating active states
+/// </summary>
 namespace Breakout;
 public class Game : DIKUGame, IGameEventProcessor{
     

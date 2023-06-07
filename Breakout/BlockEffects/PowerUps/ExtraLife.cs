@@ -3,7 +3,9 @@ using DIKUArcade.Graphics;
 using Breakout.Effects;
 
 namespace Breakout.PowerUps;
-
+/// <summary>
+/// This class is responsible for applying the power up effect to the player.
+/// </summary>
 public class ExtraLife : BlockEffect {
     public ExtraLife(DynamicShape shape, IBaseImage image) : base(shape, image) {
         this.Image = image;
@@ -11,6 +13,6 @@ public class ExtraLife : BlockEffect {
     }
 
     public override void Effect(Player p) {
-        p.health.GainHealth();
+        p.Health.GainHealth();
     }
 }

@@ -1,17 +1,17 @@
-using DIKUArcade.Events;
-using System.Collections.Generic;
 using DIKUArcade.Entities;
 using DIKUArcade.Graphics;
 using DIKUArcade.Math;
-using DIKUArcade.Input;
-using DIKUArcade.Timers;
 
 namespace Breakout;
+/// <summary>
+/// This class is responsible for rendering the players health, and updating the health when
+/// health is either lost or gained.
+/// </summary>
 public class Health{
-    public bool gameOver = false;
     private int value = 3;
     public int Value {
-        get {return value;}
+        get { return value;
+        }
     }
     public bool Invincible = false;
     private EntityContainer<Entity> activeImages = new EntityContainer<Entity>();

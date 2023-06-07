@@ -1,6 +1,5 @@
 using DIKUArcade.Entities;
 using DIKUArcade.Graphics;
-using DIKUArcade.Physics;
 
 namespace Breakout.Effects;
 public abstract class BlockEffect : Entity {

@@ -8,10 +8,11 @@ using DIKUArcade.Physics;
 using Breakout.Effects;
 using Breakout.Blocks;
 using DIKUArcade.Timers;
-using Breakout.Hazards;
 
 namespace Breakout.BreakoutStates;
-
+/// <summary>
+/// This class is responsible for instantiating  
+/// </summary>
 public class GameRunning : IGameState {
     private Entity backGroundImage;
     private Player player;
@@ -65,7 +66,9 @@ public class GameRunning : IGameState {
 
         effects = new EntityContainer<BlockEffect>();
     }
-
+    /// </summary>
+    /// Initializes the game with all the components of the game, such as player, ball etc
+    /// </summary>
     private void InitGame() {
         backGroundImage = new Entity(new StationaryShape(
                 new Vec2F(0.0f, 0.0f),
@@ -99,18 +102,22 @@ public class GameRunning : IGameState {
         effects = new EntityContainer<BlockEffect>();
     }
 
-    public void HealthUpdate() {
+    /// </summary>
+    /// Updates the player health, decrements health if all balls leaves the window. 
+    /// If player health reaches zero the game is over. 
+    /// </summary>
+    private void HealthUpdate() {
         ballCont.Iterate(b => {
             if (ballCont.CountEntities() == 1) {
                 if (b.LosingHealth() == 1) {
-                    player.health.LoseHealth();
+                    player.Health.LoseHealth();
                     b.DeleteEntity();
                     ballCont.AddEntity(new Ball(
                         new DynamicShape(new Vec2F(0.485f, 0.15f), new Vec2F(0.03f, 0.03f)),
                         new Image(Path.Combine("Assets", "Images", "ball.png"))));
                     RemoveBall(ballCont);
                 }
-                if (player.health.Value == 0) {
+                if (player.Health.Value == 0) {
                     GameEvent gameOver = new GameEvent();
                                             gameOver.EventType = GameEventType.GameStateEvent;
                                             gameOver.Message = "GAME_LOST";
@@ -123,13 +130,20 @@ public class GameRunning : IGameState {
         });
     }
 
+    /// </summary>
+    /// Makes the balls in the container double size
+    /// </summary>
     public void DoubleSize() {
         ballCont.Iterate(b => {
             b.DoubleSize();
         });
     }
 
-    public void ActivateEffect() {
+    /// </summary>
+    /// Activates effects if it collides with the player, else deletes effect
+    ///  and finally removes them
+    /// </summary>
+    private void ActivateEffect() {
         effects.Iterate(effect => {
             if (CollisionDetection.Aabb((DynamicShape)effect.Shape, player.Shape).Collision) {
                 effect.Effect(player);
@@ -142,6 +156,9 @@ public class GameRunning : IGameState {
         effects = RemoveEffects(effects);
     }
 
+    /// </summary>
+    /// Adds effects to a new entity container to be removed
+    /// </summary>
     public EntityContainer<BlockEffect> RemoveEffects(EntityContainer<BlockEffect> container){
         var count = container.CountEntities();
         EntityContainer<BlockEffect> newCont = new EntityContainer<BlockEffect>(count);
@@ -152,17 +169,24 @@ public class GameRunning : IGameState {
         }
         return newCont;
     }
-    public void ProcessDeadBlocks() {
+
+    /// </summary>
+    /// Adds in-game-effects to effects when a block is destroyed
+    /// </summary>
+    private void ProcessDeadBlocks() {
         blocks.Iterate(block => {
             if (block.Health == 0) {
-                if (block.ingameEffect is not null) {
-                    effects.AddEntity(block.ingameEffect);
+                if (block.IngameEffect is not null) {
+                    effects.AddEntity(block.IngameEffect);
                 }
                 block.DeleteEntity();
             }
         });
     }
 
+    /// </summary>
+    /// Adds blocks to a new entity container to be removed
+    /// </summary>
     public EntityContainer<Block> RemoveBlocks(EntityContainer<Block> container){
         var count = container.CountEntities();
         EntityContainer<Block> newCont = new EntityContainer<Block>(count);
@@ -174,7 +198,10 @@ public class GameRunning : IGameState {
         return newCont;
     }
 
-    public EntityContainer<Ball> RemoveBall(EntityContainer<Ball> container){
+    /// </summary>
+    /// Adds balls to a new entity container to be removed
+    /// </summary>
+    private EntityContainer<Ball> RemoveBall(EntityContainer<Ball> container){
         var count = container.CountEntities();
         EntityContainer<Ball> newCont = new EntityContainer<Ball>(count);
         foreach (Ball ent in container) {
@@ -185,7 +212,10 @@ public class GameRunning : IGameState {
         return newCont;
     }
 
-    public void RenderBlocks(){
+    /// </summary>
+    /// Renders all visible blocks
+    /// </summary>
+    private void RenderBlocks(){
         blocks.Iterate(block => {    
             if (!(block is InvisibleBlock)) {
                 block.RenderEntity();
@@ -195,6 +225,9 @@ public class GameRunning : IGameState {
         });
     }
 
+    /// </summary>
+    /// Makes blocks that are different from unbreakable blocks breakable
+    /// </summary>
     private bool AllBlocksUnbreakable() {
         bool b = true;
         blocks.Iterate(block => {
@@ -205,81 +238,112 @@ public class GameRunning : IGameState {
         return b;
     }
 
+    /// </summary>
+    /// Goes to the next level when all breakable blocks are gone, resets player, ball and timer
+    /// </summary>
     private void NextLevel() {
         if ((blocks.CountEntities() == 0)) {
             blocks = levelLoader.LevelMaker();
             ballCont.ClearContainer();
             ballCont.AddEntity(new Ball(new DynamicShape(new Vec2F(0.485f, 0.15f), 
                 new Vec2F(0.03f, 0.03f)), new Image(Path.Combine("Assets", "Images", "ball.png"))));
-            levelLoader.timer.ResetTimer();
+            // levelLoader.timer.ResetTimer();
             effects.ClearContainer();
         } else if (AllBlocksUnbreakable()) {
             blocks = levelLoader.LevelMaker();
             ballCont.ClearContainer();
             ballCont.AddEntity(new Ball(new DynamicShape(new Vec2F(0.485f, 0.15f), 
                 new Vec2F(0.03f, 0.03f)), new Image(Path.Combine("Assets", "Images", "ball.png"))));
-            levelLoader.timer.ResetTimer();
+            // levelLoader.timer.ResetTimer();
             effects.ClearContainer();
         }
 
     }
 
-    public void RenderBalls() {
+    /// </summary>
+    /// Renders balls
+    /// </summary>
+    private void RenderBalls() {
         ballCont.Iterate(b => {
             b.RenderEntity();
         });
     }
 
-    public void MoveBalls() {
+    /// </summary>
+    /// Moves the ball
+    /// </summary>
+    private void MoveBalls() {
         ballCont.Iterate(b => {
             b.Move(blocks, player);
         });
     }
 
+    /// </summary>
+    /// Processes events related to the timer
+    /// </summary>
     private void ProcessBallTimedEvents() {
         ballCont.Iterate(b => {
             b.ProcessTimedEvents();
         });
     }
 
-    public void MoveEffects() {
+    /// </summary>
+    /// Moves the effects
+    /// </summary>
+    private void MoveEffects() {
         effects.Iterate(effect => {
             effect.Move();
         });
     }
 
+    /// </summary>
+    /// Resets the game
+    /// </summary>
     public void ResetState() {
         InitGame();
     }
 
+    /// </summary>
+    /// Updates all components doing runtime 
+    /// </summary>
     public void UpdateState() {
         eventBus.ProcessEventsSequentially();
         player.ProcessTimedEvents();
         ProcessBallTimedEvents();
-        levelLoader.timer.TimeGameOver();
         player.Move();
         MoveBalls();
         MoveEffects();
         NextLevel();
         Score.PointsUpdate();
         HealthUpdate();
-        levelLoader.timer.TimeUpdate();
+        if (levelLoader.timer is not null) {
+            levelLoader.timer.TimeGameOver();
+            levelLoader.timer.TimeUpdate();
+        }
         ProcessDeadBlocks();
         blocks = RemoveBlocks(blocks);
         ActivateEffect();
     }
 
+    /// </summary>
+    /// Renders the state
+    /// </summary>
     public void RenderState() {
         backGroundImage.RenderEntity();
         player.Render();
         RenderBlocks();
         RenderBalls();
         Score.RenderPoints();
-        player.health.RenderHealth();
-        levelLoader.timer.RenderTime();
+        player.Health.RenderHealth();
+        if (levelLoader.timer is not null) {
+            levelLoader.timer.RenderTime();
+        }
         effects.RenderEntities();
     }
 
+    /// </summary>
+    /// Handles key events
+    /// </summary>
     public void HandleKeyEvent(KeyboardAction action, KeyboardKey key) {
         if (action == KeyboardAction.KeyRelease){
                 KeyRelease(key);
@@ -288,6 +352,10 @@ public class GameRunning : IGameState {
                 KeyPress(key);
             }
     }
+
+    /// </summary>
+    /// Processes events when key is released
+    /// </summary>
     private void KeyRelease(KeyboardKey key) {
             switch (key){
                 case KeyboardKey.Left:
@@ -306,36 +374,47 @@ public class GameRunning : IGameState {
                     break;
             }
         }
-        private void KeyPress(KeyboardKey key) {
-            switch (key) {
-                case KeyboardKey.Space:
-                    GameEvent startBall = new GameEvent();
-                    startBall.EventType = GameEventType.InputEvent;
-                    startBall.Message = key.ToString();
-                    BreakoutBus.GetBus().RegisterEvent(startBall);
-                    ball.ProcessEvent(startBall);
-                    break;
-                case KeyboardKey.Left:
-                    GameEvent moveLeft = new GameEvent();
-                    moveLeft.EventType = GameEventType.PlayerEvent;
-                    moveLeft.Message = key.ToString();
-                    BreakoutBus.GetBus().RegisterEvent(moveLeft);
-                    player.ProcessEvent(moveLeft);
-                    break;
-                case KeyboardKey.Right:
-                    GameEvent moveRight = new GameEvent();
-                    moveRight.EventType = GameEventType.PlayerEvent;
-                    moveRight.Message = key.ToString();
-                    BreakoutBus.GetBus().RegisterEvent(moveRight);
-                    player.ProcessEvent(moveRight);
-                    break;
-                case KeyboardKey.Escape:
-                    GameEvent pause = new GameEvent();
-                    pause.EventType = GameEventType.GameStateEvent;
-                    pause.Message = "GAME_PAUSED";
-                    StaticTimer.PauseTimer();
-                    BreakoutBus.GetBus().RegisterEvent(pause);
-                    break;
-            }
+    /// </summary>
+    /// Processes events when key is pressed
+    /// </summary>
+    private void KeyPress(KeyboardKey key) {
+        switch (key) {
+            case KeyboardKey.Space:
+                GameEvent startBall = new GameEvent();
+                startBall.EventType = GameEventType.InputEvent;
+                startBall.Message = key.ToString();
+                BreakoutBus.GetBus().RegisterEvent(startBall);
+                ball.ProcessEvent(startBall);
+                break;
+            case KeyboardKey.Left:
+                GameEvent moveLeft = new GameEvent();
+                moveLeft.EventType = GameEventType.PlayerEvent;
+                moveLeft.Message = key.ToString();
+                BreakoutBus.GetBus().RegisterEvent(moveLeft);
+                player.ProcessEvent(moveLeft);
+                break;
+            case KeyboardKey.Right:
+                GameEvent moveRight = new GameEvent();
+                moveRight.EventType = GameEventType.PlayerEvent;
+                moveRight.Message = key.ToString();
+                BreakoutBus.GetBus().RegisterEvent(moveRight);
+                player.ProcessEvent(moveRight);
+                break;
+            case KeyboardKey.Escape:
+                GameEvent pause = new GameEvent();
+                pause.EventType = GameEventType.GameStateEvent;
+                pause.Message = "GAME_PAUSED";
+                StaticTimer.PauseTimer();
+                BreakoutBus.GetBus().RegisterEvent(pause);
+                break;
+            case KeyboardKey.Tab:
+                blocks = levelLoader.LevelMaker();
+                ballCont.ClearContainer();
+                ballCont.AddEntity(new Ball(new DynamicShape(new Vec2F(0.485f, 0.15f), 
+                    new Vec2F(0.03f, 0.03f)), new Image(Path.Combine("Assets", "Images", "ball.png"))));
+                // levelLoader.timer.ResetTimer();
+                effects.ClearContainer();
+                break;
         }
+    }
 }

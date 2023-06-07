@@ -1,7 +1,9 @@
 using Breakout.Effects;
 
 namespace Breakout.Hazards;
-
+/// <summary>
+/// This class is responsible for dropping hazard.
+/// </summary>
 public class HazardDrop {
     public int? rand;
     public List<BlockEffect> hazards;

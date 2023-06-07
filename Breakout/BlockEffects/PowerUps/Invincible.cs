@@ -3,7 +3,9 @@ using DIKUArcade.Graphics;
 using Breakout.Effects;
 
 namespace Breakout.PowerUps;
-
+/// <summary>
+/// This class is responsible for applying the power up effect to the player.
+/// </summary>
 public class Invincible : BlockEffect {
     public Invincible(DynamicShape shape, IBaseImage image) : base(shape, image) {
         this.Image = image;

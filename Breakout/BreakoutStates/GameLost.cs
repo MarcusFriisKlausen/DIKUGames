@@ -3,14 +3,14 @@ using DIKUArcade.State;
 using DIKUArcade.Entities;
 using DIKUArcade.Graphics;
 using DIKUArcade.Input;
-using System.Collections.Generic;
-using System.IO;
 using DIKUArcade.Math;
-using System;
 using DIKUArcade.Events;
-using DIKUArcade.GUI;
 
 namespace Breakout.BreakoutStates;
+/// <summary>
+/// This class is responsible for instantiating and rendering the paused screen. 
+/// It handles key events and updates the state.
+/// </summary>
 public class GameLost : IGameState{
     private static GameLost? instance;
     private Entity backGroundImage;
@@ -19,6 +19,7 @@ public class GameLost : IGameState{
     private int maxMenuButtons;
     private int minMenuButtons;
     private int activeMenuButton = 1;
+     public int ActiveMenuButton{get{return activeMenuButton;}}
     public static GameLost GetInstance() {
         if (GameLost.instance == null) {
             GameLost.instance = new GameLost();
@@ -52,6 +53,7 @@ public class GameLost : IGameState{
             menuButtons[i].RenderText();
         }
         gameOver.RenderText();
+        GameRunning.GetInstance().Score.RenderPoints();
     }
     public void UpdateState() {
         BreakoutBus.GetBus().ProcessEvents();

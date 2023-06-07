@@ -5,6 +5,9 @@ using Breakout.Effects;
 using Breakout.PowerUps;
 
 namespace Breakout.Blocks;
+/// <summary>
+/// This class is responsible for creating a power up block and making it drop.
+/// </summary>
 public class PowerUpBlock : Block {
     public bool Visible;
     private List<BlockEffect> powerUpsLst;
@@ -39,6 +42,6 @@ public class PowerUpBlock : Block {
     }
 
     public override void DropEffect() {
-        ingameEffect = this.Drop(this);        
+        IngameEffect = this.Drop(this);        
     }
 }

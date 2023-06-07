@@ -5,6 +5,10 @@ using Breakout.Effects;
 using DIKUArcade.Math;
 
 namespace Breakout;
+/// <summary>
+/// This class is responsible for creating a block and its possible hazards. It also contains 
+/// functions for decrementing the blocks health, drop an effect and make the block broken.
+/// </summary>
 public abstract class Block : Entity{
     public bool CanBeDestroyed {get; set;}
     public int Health {get { return this.health; } set {}}
@@ -13,7 +17,7 @@ public abstract class Block : Entity{
     private int value;
     public int Value { get {return value; } }
     private HazardDrop drops;
-    public BlockEffect? ingameEffect;
+    public BlockEffect? IngameEffect;
     private IBaseImage brokenImage;
     public IBaseImage BrokenImage { get { return brokenImage; } set {}}
     public Block(DynamicShape shape, IBaseImage? image, IBaseImage brokenImage) : 
@@ -52,7 +56,7 @@ public abstract class Block : Entity{
     public virtual void DropEffect() {
         drops.SetRandomInt();
         if (drops.rand == 4) {
-            ingameEffect = drops.Drop(this);
+            IngameEffect = drops.Drop(this);
         }          
     }
 

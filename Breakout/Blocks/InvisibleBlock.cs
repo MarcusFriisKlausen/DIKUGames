@@ -2,6 +2,10 @@ using DIKUArcade.Entities;
 using DIKUArcade.Graphics;
 
 namespace Breakout.Blocks;
+/// <summary>
+/// This class is responsible for creating an invisible block. it also contains functions for 
+/// making it visible again and lose health.
+/// </summary>
 public class InvisibleBlock : Block {
     public bool Visible;
     private int health;

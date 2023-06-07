@@ -8,7 +8,10 @@ using DIKUArcade.Timers;
 
 
 namespace Breakout.BreakoutStates;
-
+/// <summary>
+/// This class is responsible for instantiating and rendering the main menu. It handles key events 
+/// and updates the state.
+/// </summary>
 public class MainMenu : IGameState {
     private static MainMenu? instance;
     private Text[] menuButtons;

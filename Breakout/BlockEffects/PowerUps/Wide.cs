@@ -1,10 +1,11 @@
 using DIKUArcade.Entities;
 using DIKUArcade.Graphics;
 using Breakout.Effects;
-using DIKUArcade.Math;
 
 namespace Breakout.PowerUps;
-
+/// <summary>
+/// This class is responsible for applying the power up effect to the player.
+/// </summary>
 public class Wide : BlockEffect {
     public Wide(DynamicShape shape, IBaseImage image) : base(shape, image) {
         this.Image = image;

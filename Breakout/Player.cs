@@ -8,6 +8,11 @@ using DIKUArcade.Timers;
 
 
 namespace Breakout;
+/// <summary>
+/// This class is responsible for creating and positioning the player, which includes functions
+/// for making the player able to move left and right. The class also contains functions
+/// responsible for power ups and hazards affecting the player, and processing these events
+/// </summary>
 public class Player : IGameEventProcessor {
     private GameEvent widenBack;
     private GameEvent falseInvincible;
@@ -15,7 +20,12 @@ public class Player : IGameEventProcessor {
     private double? invincibleTimeStop;
     private bool isWiden = false;
     private Entity entity;
-    public Health health;
+    private Health health;
+    public Health Health {
+        get {
+            return health;
+        }
+    }
     private DynamicShape shape;
     public DynamicShape Shape {
         get {return shape;}
@@ -137,10 +147,14 @@ public class Player : IGameEventProcessor {
             this.SetMoveLeft(false);
         }
         else if (gameEvent.Message == "reduceTime") {
-             GameRunning.GetInstance().levelLoader.timer.ReduceTime();
-         }
+            if ((GameRunning.GetInstance().levelLoader.timer is not null)) {
+                GameRunning.GetInstance().levelLoader.timer.ReduceTime();
+            }
+        }
         else if (gameEvent.Message == "moreTime") {
-            GameRunning.GetInstance().levelLoader.timer.MoreTime();
+            if (GameRunning.GetInstance().levelLoader.timer is not null) {
+                GameRunning.GetInstance().levelLoader.timer.MoreTime();
+            }
         }
         else if (gameEvent.Message == "trueInvincible") {
             this.health.Invincible = true;
@@ -170,7 +184,7 @@ public class Player : IGameEventProcessor {
         }
         if (invincibleTimeStop is not null) {
             if ((int)invincibleTimeStop == (int)StaticTimer.GetElapsedSeconds()) {
-                if (this.health.Invincible) {
+                if (this.Health.Invincible) {
                     ProcessEvent(falseInvincible);
                 }
             }

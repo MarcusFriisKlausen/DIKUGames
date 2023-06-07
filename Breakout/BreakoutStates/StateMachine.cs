@@ -2,6 +2,9 @@ using DIKUArcade.State;
 using DIKUArcade.Events;
 
 namespace Breakout.BreakoutStates;
+/// <summary>
+/// This class is responsible for switching between states, such that only one is active at a time.
+/// </summary>
 public class StateMachine : IGameEventProcessor {
     public IGameState ActiveState { get; private set; }
     public StateMachine() {

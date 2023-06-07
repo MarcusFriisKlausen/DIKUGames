@@ -2,6 +2,9 @@ using DIKUArcade.Entities;
 using DIKUArcade.Graphics;
 
 namespace Breakout.Blocks;
+/// <summary>
+/// This class is responsible for creating an unbreakable block.
+/// </summary>
 public class UnbreakableBlock : Block {
     private IBaseImage brokenImage;    
     public UnbreakableBlock(DynamicShape shape, IBaseImage image, IBaseImage brokenImage) : 

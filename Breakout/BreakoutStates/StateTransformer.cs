@@ -1,4 +1,7 @@
 namespace Breakout.BreakoutStates;
+/// <summary>
+/// This class is responsible for transforming a string to a state.
+/// </summary>
 public class StateTransformer {
     public static GameStateType TransformStringToState(string state) {
         switch(state) {
