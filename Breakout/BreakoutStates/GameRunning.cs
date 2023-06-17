@@ -16,10 +16,25 @@ namespace Breakout.BreakoutStates;
 public class GameRunning : IGameState {
     private Entity backGroundImage;
     private Player player;
+    public Player Player {
+        get {
+            return player;
+        }
+    }
     private EntityContainer<BlockEffect> effects;
     private EntityContainer<Block> blocks;
     private Ball ball;
+    public Ball Ball {
+        get {
+            return ball;
+        }
+    }
     private EntityContainer<Ball> ballCont;
+    public EntityContainer<Ball> BallCont {
+        get {
+            return ballCont;
+        }
+    }
     public Points Score;
     private static GameRunning? instance;
     private GameEventBus eventBus;
@@ -40,7 +55,7 @@ public class GameRunning : IGameState {
                 new Image(Path.Combine("Assets", "Images", "SpaceBackground.png")));
 
         player = new Player(
-            new DynamicShape(new Vec2F(0.45f, 0.1f), new Vec2F(0.1f, 0.1f)),
+            new DynamicShape(new Vec2F(0.425f, 0.1f), new Vec2F(0.15f, 0.02f)),
             new Image(Path.Combine("Assets", "Images", "player.png")));
 
         ballCont = new EntityContainer<Ball>();
@@ -76,7 +91,7 @@ public class GameRunning : IGameState {
                 new Image(Path.Combine("Assets", "Images", "SpaceBackground.png")));
         
         player = new Player(
-            new DynamicShape(new Vec2F(0.45f, 0.1f), new Vec2F(0.15f, 0.02f)),
+            new DynamicShape(new Vec2F(0.425f, 0.1f), new Vec2F(0.15f, 0.02f)),
             new Image(Path.Combine("Assets", "Images", "player.png")));
 
         ballCont = new EntityContainer<Ball>();

@@ -6,7 +6,6 @@ namespace Breakout.Blocks;
 /// This class is responsible for creating an unbreakable block.
 /// </summary>
 public class UnbreakableBlock : Block {
-    private IBaseImage brokenImage;    
     public UnbreakableBlock(DynamicShape shape, IBaseImage image, IBaseImage brokenImage) : 
         base(shape, image, brokenImage) {
             this.brokenImage = brokenImage;

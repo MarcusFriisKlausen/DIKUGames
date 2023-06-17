@@ -12,7 +12,9 @@ namespace Breakout;
 /// data from the txt files and places the given blocks at the right position.
 /// </summary>
 public class LevelLoader {
-    private string[] fileEntries = Directory.GetFiles(Path.Combine("Assets", "Levels"));
+    private string[] fileEntries = Directory.GetFiles(
+        Path.Combine(Constants.MAIN_PATH, "Assets", "Levels")
+    );
     private int mapLevel;
     public Timer timer;
     private NormalBlockFactory normalBlockFactory;

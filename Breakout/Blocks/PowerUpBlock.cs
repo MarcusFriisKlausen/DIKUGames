@@ -9,9 +9,7 @@ namespace Breakout.Blocks;
 /// This class is responsible for creating a power up block and making it drop.
 /// </summary>
 public class PowerUpBlock : Block {
-    public bool Visible;
     private List<BlockEffect> powerUpsLst;
-    private IBaseImage brokenImage;    
     public PowerUpBlock(DynamicShape shape, IBaseImage image, IBaseImage brokenImage) : 
         base(shape, image, brokenImage) {
             this.brokenImage = brokenImage;
@@ -34,14 +32,14 @@ public class PowerUpBlock : Block {
             };
     }
 
-    public BlockEffect Drop(Block block) {
+    public BlockEffect Drop() {
         int powerUpRand = new Random().Next(powerUpsLst.Count());
         BlockEffect powerUp = powerUpsLst[powerUpRand];
-        powerUp.Shape.Position = block.Shape.Position;
+        powerUp.Shape.Position = this.Shape.Position;
         return powerUp;
     }
 
     public override void DropEffect() {
-        IngameEffect = this.Drop(this);        
+        IngameEffect = this.Drop();        
     }
 }

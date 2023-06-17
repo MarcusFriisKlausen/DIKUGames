@@ -8,10 +8,8 @@ namespace Breakout.Blocks;
 /// </summary>
 public class InvisibleBlock : Block {
     public bool Visible;
-    private int health;
     private IBaseImage? blockImage;
-    private IBaseImage brokenImage;    
-    public InvisibleBlock(DynamicShape shape, IBaseImage image, IBaseImage brokenImage) : 
+        public InvisibleBlock(DynamicShape shape, IBaseImage image, IBaseImage brokenImage) : 
         base(shape, image, brokenImage) {
             this.brokenImage = brokenImage;
             this.Image = null;

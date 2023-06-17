@@ -32,6 +32,32 @@ public class BlockTests {
         powerUpBlock = new PowerUpBlock(shape, image, brokenImage);
     }
 
+
+    [Test]
+    public void TestValue() {
+        int expected = 10;
+        int actualNormal = normalBlock.Value;
+        Assert.That(actualNormal, Is.EqualTo(expected));
+
+        int actualInvis = invisBlock.Value;
+        Assert.That(actualInvis, Is.EqualTo(expected));
+
+        int actualPowerUp = powerUpBlock.Value;
+        Assert.That(actualPowerUp, Is.EqualTo(expected));
+    }
+
+    [Test]
+    public void TestHealth() {
+        int expected = 1;
+        int actualNormal = normalBlock.Health;
+        Assert.That(actualNormal, Is.EqualTo(expected));
+
+        int actualInvis = invisBlock.Health;
+        Assert.That(actualInvis, Is.EqualTo(expected));
+
+        int actualPowerUp = powerUpBlock.Health;
+        Assert.That(actualPowerUp, Is.EqualTo(expected));
+    }
     
     [Test]
     public void TestLoseHealthTrueNormal() {
@@ -49,10 +75,23 @@ public class BlockTests {
         Assert.That(actual, Is.EqualTo(expected));
     }
 
+
+    [Test]
+    public void TestIngameEffectNull() {
+        BlockEffect? expected = null;
+        BlockEffect? actualNormal = normalBlock.IngameEffect;
+        Assert.That(actualNormal, Is.EqualTo(expected));
+
+        BlockEffect? actualInvis = invisBlock.IngameEffect;
+        Assert.That(actualInvis, Is.EqualTo(expected));
+
+        BlockEffect? actualPowerUp = powerUpBlock.IngameEffect;
+        Assert.That(actualPowerUp, Is.EqualTo(expected));
+    }
     
     [Test]
     public void TestLoseHealthTrueUnbreakable() {
-        int expected = 1; // health: 1 - 1 = 0
+        int expected = 1;
         unbreakableBlock.LoseHealth();
         int actual = unbreakableBlock.Health;
         Assert.That(actual, Is.EqualTo(expected));
@@ -60,7 +99,7 @@ public class BlockTests {
 
     [Test]
     public void TestLoseHealthTrueInvisible() {
-        int expected = 1; // health: 1 - 1 = 0
+        int expected = 1;
         invisBlock.LoseHealth();
         int actual = invisBlock.Health;
         Assert.That(actual, Is.EqualTo(expected));

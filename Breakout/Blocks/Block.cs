@@ -12,13 +12,13 @@ namespace Breakout;
 public abstract class Block : Entity{
     public bool CanBeDestroyed {get; set;}
     public int Health {get { return this.health; } set {}}
-    private int maxHealth;
-    private int health;
-    private int value;
+    protected int maxHealth;
+    protected int health;
+    protected int value;
     public int Value { get {return value; } }
-    private HazardDrop drops;
+    protected HazardDrop drops;
     public BlockEffect? IngameEffect;
-    private IBaseImage brokenImage;
+    protected IBaseImage brokenImage;
     public IBaseImage BrokenImage { get { return brokenImage; } set {}}
     public Block(DynamicShape shape, IBaseImage? image, IBaseImage brokenImage) : 
         base(shape, image) {
